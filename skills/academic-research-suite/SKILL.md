@@ -90,6 +90,14 @@ SCR/Socratic 收敛开始，而非立即大纲或起草」的体验一致。
 要求完整的研究到论文管线，或要求 Socratic 收敛后继续时，才路由到
 `ars/academic-pipeline/WORKFLOW.md`。
 
+## 新手引导
+
+当用户表示自己是新手、不知道如何使用本插件、或请求教程/帮助时：
+
+1. 推荐 `GETTING_STARTED_ZH-CN.md`（仓库新手教程），并引导其使用 `/ars-guide` 交互式走查。
+2. 若用户直接说「新手教程」「怎么用」「guide」等，以 `/ars-guide` 的交互式走查响应：先问用户想做什么（固定选项，遵循「固定选项点选协议」），再按所选场景给出一句可直接复制的示例提示词与简要说明。
+3. 不改变既有工作流路由；用户给出具体任务时仍按「工作流路由」正常处理。
+
 ## Claude 风格别名路由
 
 Codex 不安装 Claude 斜杠命令，但本包模拟其意图。如果用户请求以斜杠别名（`/ars-plan`）或纯
@@ -117,6 +125,7 @@ Codex 使用当前模型。
 | `/ars-unmark-read`, `ars-unmark-read` | `codex/commands/ars-unmark-read.md` | 撤销针对活动 Material Passport 的先前人工已读标记 |
 | `/ars-cache-invalidate`, `ars-cache-invalidate` | `codex/commands/ars-cache-invalidate.md` | 使一个引文 key 的缓存验证条目失效 |
 | `/ars-full`, `ars-full` | `codex/commands/ars-full.md` | `ars/academic-pipeline/WORKFLOW.md` |
+| /ars-guide, ars-guide | codex/commands/ars-guide.md | 新手交互式引导（不进入具体工作流） |
 
 如果别名后的请求体是模糊主题、暂定标题、研究方向或「題目/主題/方向」且没有清晰研究问题，
 在路由到别名目标模式之前，先遵循上方的论文主题范围收敛覆盖规则。这适用于 `ars-plan`、
