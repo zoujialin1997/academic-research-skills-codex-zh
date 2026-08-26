@@ -5,12 +5,9 @@ All notable changes to the Codex package are documented here.
 ## Unreleased
 
 ### What's Changed
-- Fixed install and support links to point at this distribution's repository
-  (`zoujialin1997/academic-research-skills-codex-zh`) instead of the upstream
-  repo: `codex plugin marketplace add`, Desktop marketplace source, direct
-  skill-installer `--repo` in all four READMEs and `GETTING_STARTED_ZH-CN.md`,
-  plus the `SECURITY.md` advisories / issues links and the plugin manifest
-  `homepage` / `repository` / website / privacy / terms URLs.
+- Re-attributed the plugin author to `zoujialin1997` in the plugin manifest
+  (`author` and `developerName`) so the published plugin is credited to this
+  distribution's owner.
 
 ## [1.0.0] - 2026-08-27
 

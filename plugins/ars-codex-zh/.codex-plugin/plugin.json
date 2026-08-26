@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "ARS-Codex 是 Academic Research Skills 面向 Codex 的原生发行版，用于深度研究、学术写作、稿件评审、研究管线与实验规划。",
   "author": {
-    "name": "Imbad0202",
-    "url": "https://github.com/Imbad0202"
+    "name": "zoujialin1997",
+    "url": "https://github.com/zoujialin1997"
   },
   "homepage": "https://github.com/zoujialin1997/academic-research-skills-codex-zh",
   "repository": "https://github.com/zoujialin1997/academic-research-skills-codex-zh",
@@ -25,7 +25,7 @@
     "displayName": "ARS-Codex 中文版",
     "shortDescription": "面向 Codex 的深度研究、学术写作、稿件评审与实验规划工作流。",
     "longDescription": "ARS-Codex 是 Academic Research Skills 面向 Codex 的原生发行版，支持苏格拉底式研究范围收敛、文献综述与系统综述、IMRaD 论文规划与起草、稿件修改辅导、同行评审模拟、引用与学术诚信核查、实验规划，以及分阶段的研究到论文工作流。",
-    "developerName": "Imbad0202",
+    "developerName": "zoujialin1997",
     "category": "Research",
     "capabilities": [
       "Interactive",
