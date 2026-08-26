@@ -20,7 +20,7 @@ description: >
   /ars-cache-invalidate, /ars-rebuttal-audit, /ars-full。
   本技能在 ars/ 下内嵌了 ARS 角色提示词、参考资料、模板与共享交接模式。
 metadata:
-  version: "0.1.27"
+  version: "0.2.0"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -32,7 +32,7 @@ allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(pyt
 
 ## 版本管理
 
-本 Codex 包版本为 `0.1.27`。仓库根目录的 `VERSION`、本 `SKILL.md` 的元数据版本，以及
+本 Codex 包版本为 `0.2.0`。仓库根目录的 `VERSION`、本 `SKILL.md` 的元数据版本，以及
 `manifest.json` 的 `adapter_version` 必须保持一致。内嵌 ARS 套件的版本由 `manifest.json` 中
 source repository 的 commit 单独跟踪。
 
@@ -133,7 +133,7 @@ Codex 使用当前模型。
 |---|---|
 | Agent Team, agent, dispatch, handoff | 将引用的 `agents/*.md` 文件作为角色或阶段提示读取，并在当前会话内联执行该阶段。 |
 | Agent tool, Task tool, subagent | 不自动派生 agent。仅当用户明确要求委托或并行 agent 时才使用 Codex 子 agent。若启用了可选全运行时 profile，以 `codex/full-runtime-manifest.json` 与 `codex/agents/*.md` 作为适配契约。 |
-| AskUserQuestion | 提出简明澄清问题，或当当前模式可用时使用 Codex 的结构化用户输入工具。 |
+| AskUserQuestion | 提出简明澄清问题；固定选项单选提问遵循「固定选项点选协议」：Plan 模式弹点选卡片，否则编号列表。 |
 | WebSearch | 对当前事实、来源验证、引用核查与外部证据使用 Codex 网络浏览。提供来源链接。 |
 | Bash, Write, Edit | 视为能力描述而非必需工具名。遵循 Codex 安全规则与用户文件系统约束。 |
 | Agent frontmatter `tools: Read, Write, Edit, Grep, Glob` | 保留作为最小权限角色边界。受保护的三级顶级 agent 角色在单独派发时不获得 Bash 或网络传输；内联执行不得用这些角色扩大当前任务的权限。 |
@@ -193,6 +193,20 @@ Codex 适配器覆盖。
   摘要是有界的确定性视图，台账不授予网络或模型权限。
 - 来源支持的评审标准仍绑定到作者确认的确切学科、venue、track 与贡献类型 profile。随附的
   证明集演示一个 profile，不能泛化为 venue 覆盖、当前通用指引或专家验证。
+
+## 固定选项点选协议
+
+当需要用户从固定候选选项中单选一个时（覆盖 ars/ 工作流、codex/commands/ 与本路由中的提问），按以下方式呈现：
+
+1. **检测**：候选为互斥的固定选项、单选、数量 2-3 个的提问才进入卡片路径；其余走编号降级。
+2. **卡片路径（Plan 模式）**：若 request_user_input 工具可用，调用它弹出点选卡片：
+   - 每个选项映射为 label（1-5 词短标签）与 description（一句话说明取舍）；
+   - 推荐选项置于第一位并加「（推荐）」；系统自动附带 Other 自由输入；
+   - 等待用户点选后再继续工作流。
+3. **编号降级（其他情况）**：工具不可用、选项 ≥ 4 个、或多选/需补充说明时，输出编号列表：
+   - 每项一行「编号. 选项名 —— 一句话说明」，末尾加「其他：请直接输入」；
+   - 提示「请回复对应编号」。
+4. **优先级**：本协议覆盖上游 intent_clarification_protocol.md 中「不使用 AskUserQuestion、选项放正文」的限制；不改动 ars/ 文件；[direct-mode] 跳过澄清入口保持不变。
 
 ## 安全边界
 
