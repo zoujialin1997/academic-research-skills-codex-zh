@@ -8,7 +8,7 @@
 
 - 上游项目：[Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex)（ARS-Codex，Codex 原生学术研究套件）
 - 上游 ARS 内容源：[Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills)（Claude Code 版，被 vendored 内嵌）
-- 当前版本：Codex 包 `0.1.27`，内嵌 ARS `v3.21.1`
+- 当前版本：Codex 包 `0.2.0`，内嵌 ARS `v3.21.1`
 - 本仓库本质是**同步镜像 + Codex 适配层**，git 历史以 `chore: sync ARS vX @ commit` 这类同步提交为主
 
 ## 目录结构
@@ -38,9 +38,9 @@
 - 修改后必须验证两边逐字节一致（用防护脚本，见「同步上游」）
 
 ### 3. 版本一致性
-- `VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version` 三者必须一致（当前 `0.1.27`）
+- `VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version`、`plugins/ars-codex-zh/.codex-plugin/plugin.json` 的 `version` 四者必须一致（当前 `0.2.0`）
 - 这三个值跟踪 **Codex 包版本**，与内嵌 ARS 套件版本（由 `manifest.json` 的 source commit 跟踪）相互独立
-- 升级包版本时必须三处同步更新（详见「版本管理」）
+- 升级包版本时必须四处同步更新（详见「版本管理」）
 
 ### 4. 汉化范围约定
 - 汉化只做 **Codex 适配层**：`SKILL.md`、`codex/`、`plugins/ars-codex-zh/.codex-plugin/plugin.json`、`agents/openai.yaml`、`examples/`、根文档（`README_ZH-CN.md` 等）
@@ -63,6 +63,13 @@
 - 何时触发：防护脚本的 `[DRIFT]` 报告列出「上游变更文件 → 引用它的适配文件」，凡引用关系命中的适配文件都要复查并更新
 - 适配层内容来自上游「语义」而非「文本」——上游改了路由/模式/行为，即使适配文件没被物理覆盖，也要跟着改
 
+### 7. 新加功能受同步保护（不可被上游同步直接覆盖）
+- 适配层**新增的功能或内容**（如 `SKILL.md` 新增小节、`codex/` 新增文件/命令/参考、插件元数据、根文档新增章节）一律视为「受保护内容」
+- 上游同步的写入目标只能是 `skills/academic-research-suite/ars/`（铁律 5）；同步与「重新汉化适配」都**不得直接覆盖、删除或回退**新加功能
+- 上游改动命中新功能所引用文件时，按铁律 6 做**语义合并**：保留新功能，只同步适配上游语义变化，禁止回退到上游原版
+- 新加的功能性文件若不在既有受保护清单内，必须登记进 `PROTECTED_TREES` 并 `python scripts/verify_localization_guard.py --update` 记录基线
+- 包版本号（`VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version`、`plugin.json` 的 `version`）由人工维护，同步不得静默回退
+
 ## 同步上游
 
 同步机制由 `skills/academic-research-suite/manifest.json` 记录（`source_repositories[]`、`generated_date`、`excluded_patterns`、`inactive_upstream_scripts`）。
@@ -73,6 +80,7 @@
 |---|---|
 | `skills/academic-research-suite/ars/` | ✅ 唯一允许被上游整体覆盖的范围 |
 | 铁律 5 列出的受保护文件（适配层 + 根文档） | ❌ 必须逐字节保留，绝不能被覆盖 |
+| 铁律 7 的「新加功能」（适配层新增内容） | ❌ 不得被同步/重新适配覆盖、删除或回退；上游变更时语义合并 |
 | `manifest.json` 的 `source_repositories` / `generated_date` | ⚠️ 同步会合法更新；但 `adapter_version` 需人工维护（铁律 3） |
 
 ### 同步流程
@@ -92,7 +100,7 @@
 9. 再次运行 `python scripts/verify_localization_guard.py --check`，退出码必须为 0 才允许提交
 10. 运行测试（见下）
 
-**⚠️ 同步后复查**：汉化过的适配层没有被上游覆盖、双副本一致、版本号三处一致、重新适配完成、防护脚本通过。
+**⚠️ 同步后复查**：汉化过的适配层没有被上游覆盖、新加功能未被覆盖或回退、双副本一致、版本号四处一致、重新适配完成、防护脚本通过。
 
 ### 重新适配映射表
 
@@ -145,7 +153,7 @@
 ### 双版本轴（互相独立）
 | 版本 | 位置 | 更新时机 |
 |---|---|---|
-| **Codex 包版本** | `VERSION` + `SKILL.md` 的 `metadata.version` + `manifest.json` 的 `adapter_version`（三处必须一致） | 仅当本仓库自身有变更时 |
+| **Codex 包版本** | `VERSION` + `SKILL.md` 的 `metadata.version` + `manifest.json` 的 `adapter_version` + `plugin.json` 的 `version`（四处必须一致） | 仅当本仓库自身有变更时 |
 | **内嵌 ARS 套件版本** | `manifest.json` 的 `source_repositories[].commit` + `generated_date`（可参考上游 release tag，如 `v3.21.1`） | 仅上游同步时，由上游决定 |
 
 ### 语义化版本（针对 Codex 包版本）
@@ -155,7 +163,7 @@
 
 ### 版本变更流程
 1. 按语义化规则决定新版本号
-2. **同一个 commit 内**同步更新三处：`VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version`
+2. **同一个 commit 内**同步更新四处：`VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version`、`plugins/ars-codex-zh/.codex-plugin/plugin.json` 的 `version`
 3. 更新 `CHANGELOG.md`：把 `Unreleased` 内容归档为 `## [x.y.z] - <日期>`，再新建空的 `Unreleased` 段
 4. 打 tag：`git tag v0.1.28`（与 `VERSION` 一致）
 5. `SKILL.md` 是受保护文件，版本变更后必须 `python scripts/verify_localization_guard.py --update` 再 `--check`
