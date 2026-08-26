@@ -4,6 +4,17 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.4.1] - 2026-08-27
+
+### What's Changed
+- Made the beginner tutorial and the `/ars-guide` interactive guide fully
+  Chinese-first: all copy-paste example prompts are now natural Chinese requests,
+  and specialist terms (Socratic scoping, IMRaD, literature review, systematic
+  review, direct mode) carry plain-language Chinese explanations. This is a pure
+  localization polish of the `0.4.0` beginner-guide feature; routing behavior is
+  unchanged.
+- Bumped the Codex package version to `0.4.1` (PATCH) for the localization fix.
+
 ## [0.4.0] - 2026-08-27
 
 ### What's Changed
