@@ -1,8 +1,8 @@
 interface:
   display_name: "ARS-Codex"
-  short_description: "Codex-native research workflows plus ars-* aliases"
+  short_description: "面向 Codex 的深度研究工作流及 ars-* 别名"
   brand_color: "#2563EB"
-  default_prompt: "Use $academic-research-suite with ars-plan to map my paper structure and missing evidence."
+  default_prompt: "使用 $academic-research-suite 配合 ars-plan 规划我的论文结构与缺失证据。"
 
 policy:
   allow_implicit_invocation: true

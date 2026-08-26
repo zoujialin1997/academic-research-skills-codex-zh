@@ -65,7 +65,7 @@ def test_ars_plan_routes_to_academic_paper_plan_when_rq_exists() -> None:
     assert plan["command_alias"] == "ars-plan"
     assert plan["workflow"] == "academic-paper"
     assert plan["mode"] == "plan"
-    assert plan["command_recipe"] == "ars/commands/ars-plan.md"
+    assert plan["command_recipe"] == "codex/commands/ars-plan.md"
 
 
 def test_ars_lit_review_alias_routes_to_lit_review_mode() -> None:
@@ -84,7 +84,7 @@ def test_ars_cache_invalidate_alias_routes_to_pipeline_cache_mode() -> None:
     assert plan["command_alias"] == "ars-cache-invalidate"
     assert plan["workflow"] == "academic-pipeline"
     assert plan["mode"] == "cache-invalidate"
-    assert plan["command_recipe"] == "ars/commands/ars-cache-invalidate.md"
+    assert plan["command_recipe"] == "codex/commands/ars-cache-invalidate.md"
 
 
 def test_ars_3w_alias_routes_to_deep_research_three_way_scan() -> None:
@@ -93,7 +93,7 @@ def test_ars_3w_alias_routes_to_deep_research_three_way_scan() -> None:
     assert plan["command_alias"] == "ars-3w"
     assert plan["workflow"] == "deep-research"
     assert plan["mode"] == "three-way-scan"
-    assert plan["command_recipe"] == "ars/commands/ars-3w.md"
+    assert plan["command_recipe"] == "codex/commands/ars-3w.md"
 
 
 def test_ars_rebuttal_audit_alias_routes_to_academic_paper() -> None:
@@ -102,7 +102,18 @@ def test_ars_rebuttal_audit_alias_routes_to_academic_paper() -> None:
     assert plan["command_alias"] == "ars-rebuttal-audit"
     assert plan["workflow"] == "academic-paper"
     assert plan["mode"] == "rebuttal-audit"
-    assert plan["command_recipe"] == "ars/commands/ars-rebuttal-audit.md"
+    assert plan["command_recipe"] == "codex/commands/ars-rebuttal-audit.md"
+
+
+def test_command_recipe_prefers_codex_override_and_falls_back_to_vendored() -> None:
+    planner = _load_planner()
+    # Chinese override exists -> codex/commands is preferred
+    assert planner.resolve_command_recipe("ars/commands/ars-plan.md") == "codex/commands/ars-plan.md"
+    # no override yet -> fall back to the vendored English recipe
+    assert (
+        planner.resolve_command_recipe("ars/commands/ars-not-yet-translated.md")
+        == "ars/commands/ars-not-yet-translated.md"
+    )
 
 
 def test_korean_revision_routes_to_academic_paper_not_reviewer() -> None:

@@ -4,9 +4,11 @@
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
+**语言：** [English](README.md) · [简体中文](README_ZH-CN.md) · [繁體中文](README_ZH-TW.md) · [日本語](README_JA.md)
+
 ARS-Codex 是
 [Academic Research Skills（ARS）Claude Code 版](https://github.com/Imbad0202/academic-research-skills)
-的 Codex 原生 sibling。它是独立的 Codex 发行版，拥有自己的 plugin 标识、
+的 Codex 原生姊妹版（sibling）。它是独立的 Codex 发行版，拥有自己的 plugin 标识、
 打包、版本和 runtime adapter。
 
 本仓库将 ARS workflow 内容作为单个 Codex skill 进行内嵌分发：

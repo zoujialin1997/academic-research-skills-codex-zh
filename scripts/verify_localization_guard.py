@@ -86,11 +86,14 @@ def is_ignored(path: Path) -> bool:
         return True
     return path.suffix.lower() in IGNORED_SUFFIXES
 def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
+    """SHA-256 of a file with line endings normalized (CRLF/CR -> LF).
+
+    Keeps hashes stable across checkouts so guard results do not depend on
+    core.autocrlf or the OS line-ending convention.
+    """
     with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 16), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+        data = handle.read().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(data).hexdigest()
 
 
 def iter_protected_files() -> list[Path]:
