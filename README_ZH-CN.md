@@ -12,6 +12,14 @@ ARS-Codex 是
 的 Codex 原生姊妹版（sibling）。它是独立的 Codex 发行版，拥有自己的 plugin 标识、
 打包、版本和 runtime adapter。
 
+## 中文版新增功能（v1.0.0）
+
+本中文适配版在完整 ARS 套件之上，额外提供面向中文用户的能力：
+
+- **新手教程**：[《新手快速上手》](GETTING_STARTED_ZH-CN.md) 从零到会用；对话内输入 `/ars-guide` 可交互式引导，一步步选场景、拿示例提示词。
+- **固定选项点选卡片**：需要在固定选项里单选时，Plan 模式弹出点选卡片，点选即可，不用打字。
+- **专业术语通俗解释**：面向你的输出中，专业术语首次出现会用括号附一句大白话解释。
+
 本仓库将 ARS workflow 内容作为单个 Codex skill 进行内嵌分发：
 
 ```text
@@ -191,6 +199,7 @@ ars-plan my paper on AI governance in universities.
 | `/ars-unmark-read` | `ars-unmark-read` | 撤销先前的人工阅读信号 |
 | `/ars-cache-invalidate` | `ars-cache-invalidate` | 使某个引用键的缓存验证条目失效 |
 | `/ars-full` | `ars-full` | `academic-pipeline` 完整 workflow |
+| /ars-guide | ars-guide | 新手交互式引导（不进入具体工作流） |
 
 ### 使用模式
 

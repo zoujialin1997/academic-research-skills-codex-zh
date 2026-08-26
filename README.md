@@ -5,6 +5,7 @@
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
 **Languages:** [English](README.md) · [简体中文](README_ZH-CN.md) · [繁體中文](README_ZH-TW.md) · [日本語](README_JA.md)
+🚀 Chinese beginner tutorial → [《新手快速上手》](GETTING_STARTED_ZH-CN.md) (Chinese-only); type `/ars-guide` in chat for interactive onboarding.
 
 ARS-Codex is the Codex-native sibling of
 [Academic Research Skills (ARS) for Claude Code](https://github.com/Imbad0202/academic-research-skills).
@@ -216,6 +217,7 @@ ars-plan my paper on AI governance in universities.
 | `/ars-unmark-read` | `ars-unmark-read` | Rescind a prior human-read signal |
 | `/ars-cache-invalidate` | `ars-cache-invalidate` | Invalidate cached verification entries for one citation key |
 | `/ars-full` | `ars-full` | `academic-pipeline` full workflow |
+| /ars-guide | ars-guide | Interactive beginner onboarding (does not enter a workflow) |
 
 ### Working Pattern
 

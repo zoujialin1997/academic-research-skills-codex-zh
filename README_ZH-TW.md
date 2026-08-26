@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/badge/version-v1.0.0-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
+🚀 簡體中文新手教學 → [《新手快速上手》](GETTING_STARTED_ZH-CN.md)（僅簡體中文）；對話中輸入 `/ars-guide` 可取得互動式引導。
 
 ARS-Codex 是
 [Academic Research Skills（ARS）Claude Code 版](https://github.com/Imbad0202/academic-research-skills)
@@ -185,6 +186,7 @@ ars-plan my paper on AI governance in universities.
 | `/ars-revision-coach` | `ars-revision-coach` | `academic-paper` `revision-coach` 模式 |
 | `/ars-revision` | `ars-revision` | `academic-paper` `revision` 模式 |
 | `/ars-full` | `ars-full` | `academic-pipeline` 完整 workflow |
+| /ars-guide | ars-guide | 新手互動式引導（不進入具體工作流） |
 
 ### 使用模式
 

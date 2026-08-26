@@ -4,6 +4,11 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+### What's Changed
+- Updated the README set: added the `/ars-guide` alias row to all four READMEs,
+  added a "中文版新增功能" section to `README_ZH-CN.md`, and added beginner-tutorial
+  pointers to the EN / ZH-TW / JA READMEs.
+
 ## [1.0.0] - 2026-08-27
 
 ### What's Changed

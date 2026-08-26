@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/badge/version-v1.0.0-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
+🚀 中国語（簡体）初心者チュートリアル → [《新手快速上手》](GETTING_STARTED_ZH-CN.md)（中国語のみ）；チャットで `/ars-guide` と入力すると対話形式のガイドが利用できます。
 
 ARS-Codex は、[Academic Research Skills（ARS）Claude Code 版](https://github.com/Imbad0202/academic-research-skills) の Codex ネイティブな sibling ディストリビューションです。独自の plugin ID、パッケージング、バージョン、および runtime adapter を持ちます。
 
@@ -157,6 +158,7 @@ ars-plan my paper on AI governance in universities.
 | `/ars-revision-coach` | `ars-revision-coach` | `academic-paper` `revision-coach` モード |
 | `/ars-revision` | `ars-revision` | `academic-paper` `revision` モード |
 | `/ars-full` | `ars-full` | `academic-pipeline` フルワークフロー |
+| /ars-guide | ars-guide | 初心者向けインタラクティブガイド（ワークフローには入りません） |
 
 ### 作業パターン
 
