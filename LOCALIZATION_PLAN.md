@@ -1,6 +1,6 @@
 # ARS-Codex 适配层汉化方案（Localization Plan）
 
-> 文档状态：已定稿待执行
+> 文档状态：**P0/P1 已交付，P2 命令覆盖层已落地（v1 完成）**
 > 所属分支：`codex/zh-adapter-layer`
 > 适用仓库：`academic-research-skills-codex-zh`（ARS-Codex 中文适配镜像，Codex 包 `0.1.27` / 内嵌 ARS `v3.21.1`）
 
@@ -29,19 +29,17 @@
 | P1 | `skills/academic-research-suite/codex/README.md`、`codex/agents/*.md`（5 个）、`codex/compatibility-matrix.md` | 英文 | 中文化 |
 | P1 | `examples/`（README + 各 stage 文件） | 英文 | 中文示例说明 |
 | P1 | 根 `README_ZH-CN.md` | 已存在但夹杂英文术语 | 润色 + 术语统一 + 与 `README.md` 同步 |
-| P2 | `ars/commands/ars-*.md`（16 个） | 英文（vendored） | **决策点**，见下 |
+| P2 | `ars/commands/ars-*.md`（16 个） | 英文（vendored） | **已完成**：`codex/commands/` 中文覆盖层，路由优先覆盖、缺失回退上游 |
 | — | `ars/` 其余内容 | 英文 | **不汉化**（上游保护） |
 
 ### P2 决策点：命令提示词（ars/commands）
 
 `ars/commands/*` 位于 vendored 目录，直接修改违反 AGENTS.md 铁律 1（`ars/` 禁止手工编辑）。
 
-**推荐方案（v1 暂缓，先保持英文）**：
-- 在 `codex/commands/` 放中文版命令提示词
-- 修改 `SKILL.md` 别名路由：**优先读 `codex/commands/`，回退 `ars/commands/`**
-- 好处：命令提示中文化的同时完全不碰上游，同步时零冲突
-
-**备选方案**：v1 不做命令覆盖，`ars-*` 命令提示保持英文，仅路由说明中文化。
+**推荐方案（已执行，v1 落地）**：
+- 在 `codex/commands/` 放 16 个中文版命令提示词（与 `ars/commands/` 同名）
+- 修改 `SKILL.md` 别名路由与 `ars_codex_full_runtime.py` 解析器：**优先读 `codex/commands/`，缺失回退 `ars/commands/`**
+- 好处：命令提示中文化的同时完全不碰上游，同步时零冲突；未来上游新增命令未覆盖前自动回退英文原版
 
 ---
 
@@ -80,7 +78,7 @@
 
 ### 4. 命令提示（ars-*.md）
 - **前**：`/ars-plan` 读到的提示词全英文。
-- **后**：若采用 P2 覆盖层方案，中文；否则保留英文但路由说明中文（v1 建议后者）。
+- **后**：`codex/commands/` 中文覆盖层已落地——`/ars-plan` 优先读到中文提示词；未覆盖的新命令回退上游英文 `ars/commands/`。SKILL.md 路由表与 `full-runtime` 解析器均实现「优先覆盖、缺失回退」。
 
 ### 5. 示例（examples/）
 - **前**：英文 README 与 stage 说明，中文用户难以对照。
@@ -111,7 +109,7 @@
 4. **P1-a**：`codex/` 适配层文档 + agent 模板
 5. **P1-b**：`examples/`
 6. **P1-c**：`README_ZH-CN.md` 润色
-7. **P2（可选）**：`codex/commands/` 中文覆盖层
+7. **P2（已完成）**：`codex/commands/` 中文覆盖层（16 个命令）
 
 ## 七、每步完成标准（验证）
 
@@ -119,6 +117,7 @@
 2. 防护脚本：`python scripts/verify_localization_guard.py --check` 退出码为 0
 3. 适配层测试：`python -m pytest skills/academic-research-suite/codex/tests`
 4. 中文冒烟：用中文提问逐一触发各工作流（深度研究 / 论文写作 / 稿件评审 / 完整管线 / 实验规划）
+   > 注：结构级校验（触发词、路径、解析器回退）已通过；真实 `codex exec` 中文端到端冒烟需在可运行 codex CLI 的机器上安装 skill 后执行。
 
 > 注意：受保护文件（含 `SKILL.md`、`plugin.json`）改动属有意编辑，完成后需 `python scripts/verify_localization_guard.py --update` 记录新基线。
 

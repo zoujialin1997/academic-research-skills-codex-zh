@@ -41,6 +41,7 @@ export ARS_CODEX_TOPOLOGY_ARM=reviewer-five-panel
 - `scripts/ars_codex_full_runtime.py` 将请求转为确定性 JSON 计划。它是只读的，可安全在测试中运行。
 - `scripts/ars_codex_quality_gates.py` 验证适配器打包、hook 安全、审稿人独立性夹具与上游锁定来源。
 - `agents/*.md` 是 Codex 子 agent 模板。它们指向 vendored 的 ARS 源提示词，而非复制上游提示词正文。
+- `commands/*.md` 是 `ars/commands/` 的中文覆盖提示配方；解析器优先读取此处，缺失时回退上游英文原版。
 - `compatibility-matrix.md` 记录 Claude Code 对齐度、剩余差距与验证方法。
 - `topology-experiment/` 包含冻结的 issue #37 队列、clean-room 外壳、每次运行资源回执、held-out 裁定与本地 go/no-go 报告。
 

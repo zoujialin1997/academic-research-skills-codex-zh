@@ -111,11 +111,21 @@ def load_manifest(path: Path = MANIFEST_PATH) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+
 def rel(path: Path) -> str:
     try:
         return str(path.relative_to(SUITE_ROOT))
     except ValueError:
         return str(path)
+
+
+def resolve_command_recipe(recipe: str) -> str:
+    """Prefer the adapter-local codex/commands/<name> Chinese override;
+    fall back to the vendored ars/commands/<name> recipe."""
+    override = CODEX_ROOT / "commands" / Path(recipe).name
+    if override.exists():
+        return rel(override).replace(os.sep, "/")
+    return recipe
 
 
 def canonical_alias(alias: str | None) -> str | None:
@@ -607,7 +617,7 @@ def plan_request(request: str, env: dict[str, str] | None = None) -> dict[str, A
     if command:
         workflow = command["workflow"]
         mode = command["mode"]
-        recipe = command["recipe"]
+        recipe = resolve_command_recipe(command["recipe"])
         model_hint = command["model_hint"]
         if canonical_alias(alias) in ALIAS_SOC_OVERRIDE and is_vague_paper_topic(request):
             workflow = "deep-research"

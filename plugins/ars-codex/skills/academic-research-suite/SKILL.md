@@ -93,30 +93,30 @@ SCR/Socratic 收敛开始，而非立即大纲或起草」的体验一致。
 ## Claude 风格别名路由
 
 Codex 不安装 Claude 斜杠命令，但本包模拟其意图。如果用户请求以斜杠别名（`/ars-plan`）或纯
-别名（`ars-plan`）开头，将其视为模式快捷方式：从任务文本中剥离别名 token，读取对应的
-`ars/commands/ars-*.md` 提示配方，然后路由到下方工作流的 `WORKFLOW.md`。
+别名（`ars-plan`）开头，将其视为模式快捷方式：从任务文本中剥离别名 token，优先读取 `codex/commands/ars-*.md` 中文覆盖提示配方
+（缺失时回退上游英文 `ars/commands/ars-*.md`），然后路由到下方工作流的 `WORKFLOW.md`。
 
 命令 frontmatter 中的 `model:` 字段仅是 Claude 路由提示。除非用户明确要求其他模型，否则
 Codex 使用当前模型。
 
 | 别名 | 读取命令配方 | 然后路由到 |
 |---|---|---|
-| `/ars-plan`, `ars-plan` | `ars/commands/ars-plan.md` | 以 `plan` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-outline`, `ars-outline` | `ars/commands/ars-outline.md` | 以 `outline-only` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-abstract`, `ars-abstract` | `ars/commands/ars-abstract.md` | 以 `abstract-only` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-lit-review`, `ars-lit-review` | `ars/commands/ars-lit-review.md` | 以 `lit-review` 模式进入 `ars/academic-paper/WORKFLOW.md`；若用户想要来源发现与综合，则路由到 `ars/deep-research/WORKFLOW.md` 的 `lit-review` 模式 |
-| `/ars-3w`, `ars-3w` | `ars/commands/ars-3w.md` | 以 `three-way-scan` 模式进入 `ars/deep-research/WORKFLOW.md` |
-| `/ars-citation-check`, `ars-citation-check` | `ars/commands/ars-citation-check.md` | 以 `citation-check` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-disclosure`, `ars-disclosure` | `ars/commands/ars-disclosure.md` | 以 `disclosure` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-format-convert`, `ars-format-convert` | `ars/commands/ars-format-convert.md` | 以 `format-convert` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-revision-coach`, `ars-revision-coach` | `ars/commands/ars-revision-coach.md` | 以 `revision-coach` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-revision`, `ars-revision` | `ars/commands/ars-revision.md` | 以 `revision` 模式进入 `ars/academic-paper/WORKFLOW.md` |
-| `/ars-rebuttal-audit`, `ars-rebuttal-audit` | `ars/commands/ars-rebuttal-audit.md` | 以 `rebuttal-audit` 模式进入 `ars/academic-paper/WORKFLOW.md`；需要审稿人意见与已有的回复草稿 |
-| `/ars-reviewer`, `ars-reviewer` | `ars/commands/ars-reviewer.md` | 以 `full` 模式进入 `ars/academic-paper-reviewer/WORKFLOW.md`，除非其他 reviewer 模式被明确指定 |
-| `/ars-mark-read`, `ars-mark-read` | `ars/commands/ars-mark-read.md` | 针对活动 Material Passport 记录一条用户自证的已读声明；每次新标记都需要用户拥有的 `read_scope`，仅 `sections` 范围允许 locator |
-| `/ars-unmark-read`, `ars-unmark-read` | `ars/commands/ars-unmark-read.md` | 撤销针对活动 Material Passport 的先前人工已读标记 |
-| `/ars-cache-invalidate`, `ars-cache-invalidate` | `ars/commands/ars-cache-invalidate.md` | 使一个引文 key 的缓存验证条目失效 |
-| `/ars-full`, `ars-full` | `ars/commands/ars-full.md` | `ars/academic-pipeline/WORKFLOW.md` |
+| `/ars-plan`, `ars-plan` | `codex/commands/ars-plan.md` | 以 `plan` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-outline`, `ars-outline` | `codex/commands/ars-outline.md` | 以 `outline-only` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-abstract`, `ars-abstract` | `codex/commands/ars-abstract.md` | 以 `abstract-only` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-lit-review`, `ars-lit-review` | `codex/commands/ars-lit-review.md` | 以 `lit-review` 模式进入 `ars/academic-paper/WORKFLOW.md`；若用户想要来源发现与综合，则路由到 `ars/deep-research/WORKFLOW.md` 的 `lit-review` 模式 |
+| `/ars-3w`, `ars-3w` | `codex/commands/ars-3w.md` | 以 `three-way-scan` 模式进入 `ars/deep-research/WORKFLOW.md` |
+| `/ars-citation-check`, `ars-citation-check` | `codex/commands/ars-citation-check.md` | 以 `citation-check` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-disclosure`, `ars-disclosure` | `codex/commands/ars-disclosure.md` | 以 `disclosure` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-format-convert`, `ars-format-convert` | `codex/commands/ars-format-convert.md` | 以 `format-convert` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-revision-coach`, `ars-revision-coach` | `codex/commands/ars-revision-coach.md` | 以 `revision-coach` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-revision`, `ars-revision` | `codex/commands/ars-revision.md` | 以 `revision` 模式进入 `ars/academic-paper/WORKFLOW.md` |
+| `/ars-rebuttal-audit`, `ars-rebuttal-audit` | `codex/commands/ars-rebuttal-audit.md` | 以 `rebuttal-audit` 模式进入 `ars/academic-paper/WORKFLOW.md`；需要审稿人意见与已有的回复草稿 |
+| `/ars-reviewer`, `ars-reviewer` | `codex/commands/ars-reviewer.md` | 以 `full` 模式进入 `ars/academic-paper-reviewer/WORKFLOW.md`，除非其他 reviewer 模式被明确指定 |
+| `/ars-mark-read`, `ars-mark-read` | `codex/commands/ars-mark-read.md` | 针对活动 Material Passport 记录一条用户自证的已读声明；每次新标记都需要用户拥有的 `read_scope`，仅 `sections` 范围允许 locator |
+| `/ars-unmark-read`, `ars-unmark-read` | `codex/commands/ars-unmark-read.md` | 撤销针对活动 Material Passport 的先前人工已读标记 |
+| `/ars-cache-invalidate`, `ars-cache-invalidate` | `codex/commands/ars-cache-invalidate.md` | 使一个引文 key 的缓存验证条目失效 |
+| `/ars-full`, `ars-full` | `codex/commands/ars-full.md` | `ars/academic-pipeline/WORKFLOW.md` |
 
 如果别名后的请求体是模糊主题、暂定标题、研究方向或「題目/主題/方向」且没有清晰研究问题，
 在路由到别名目标模式之前，先遵循上方的论文主题范围收敛覆盖规则。这适用于 `ars-plan`、
@@ -322,6 +322,7 @@ fail-closed 解析；格式错误的外壳或结果降级为 `unavailable`，绝
 - `ars/scripts/` 包含上游验证器与参考适配器。
 - `ars/examples/` 包含上游非 PDF 夹具与模板。
 - `ars/docs/design/` 包含被 ARS 协议引用的上游设计规格。
+- `codex/commands/` 提供对应的中文覆盖提示配方（缺失时回退 `ars/commands/` 英文原版）。
 - `ars/commands/` 包含上游 Claude 斜杠命令提示配方。
 - `ars/hooks/` 包含为可追溯性保留的上游 Claude hook 元数据。
 - `ars/tests/` 包含验证器测试使用的上游夹具语料。
