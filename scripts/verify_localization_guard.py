@@ -59,6 +59,7 @@ PROTECTED_TREES = [
     "README_ZH-TW.md",
     "README_JA.md",
     "CHANGELOG.md",
+    "GETTING_STARTED_ZH-CN.md",
 ]
 
 # Adapted files that reference vendored upstream paths; used to flag which
@@ -71,6 +72,7 @@ ADAPTATION_REFERENCE_FILES = [
     "README_ZH-TW.md",
     "README_JA.md",
     "CHANGELOG.md",
+    "GETTING_STARTED_ZH-CN.md",
     "examples",
 ]
 
