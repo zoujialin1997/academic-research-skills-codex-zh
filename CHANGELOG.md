@@ -4,6 +4,17 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.3.0] - 2026-08-26
+
+### What's Changed
+- Added the plain-language terms protocol to the `SKILL.md` router:
+  user-facing output now explains specialist terms in plain language on
+  first occurrence (kept in parentheses after the original term), following
+  the session language; the adaptation layer covers all `ars/` workflows
+  without modifying vendored files.
+- Bumped the Codex package version to `0.3.0` (MINOR) for the adapter behavior
+  change.
+
 ## [0.2.0] - 2026-08-26
 
 ### What's Changed
