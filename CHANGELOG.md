@@ -4,6 +4,12 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+### What's Changed
+- Corrected stale version references across `README.md`, `README_ZH-TW.md`,
+  `README_JA.md`, the compatibility matrix, `AGENTS.md`, and
+  `LOCALIZATION_PLAN.md` to the current package version `0.4.1` (display /
+  version-text consistency only; no behavior change, no version bump).
+
 ## [0.4.1] - 2026-08-27
 
 ### What's Changed
