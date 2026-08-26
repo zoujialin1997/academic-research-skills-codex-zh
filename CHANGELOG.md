@@ -4,6 +4,17 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.2.0] - 2026-08-26
+
+### What's Changed
+- Added the fixed-option choice-card protocol to the `SKILL.md` router:
+  single-select questions with 2-3 fixed options render a clickable selection
+  card in Plan mode (via `request_user_input`) and fall back to a numbered
+  option list elsewhere; the adaptation layer covers questions from `ars/`
+  workflows without modifying vendored files.
+- Bumped the Codex package version to `0.2.0` (MINOR) for the adapter behavior
+  change.
+
 ## [0.1.27] - 2026-08-24
 
 ### What's Changed

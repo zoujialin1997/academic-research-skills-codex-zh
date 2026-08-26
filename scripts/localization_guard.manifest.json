@@ -1,5 +1,5 @@
 {
- "CHANGELOG.md": "83f6df3d315a46a8780028717ea57f7f2734b69d55fb17f9c892cb28f206d1be",
+ "CHANGELOG.md": "82c1d3c7c66c65cbe64616520fa72a085b89c1d362072df4e4d67ceb7fc62a48",
  "README.md": "b3ff5f30507a239186d02dae57f9a961b7d2860a84ed54ddedc6aa5eb113d4ec",
  "README_JA.md": "b54ec5557cec2c17b7a7352e30445fd56e30effbda23c3507d8e995dd8089b05",
  "README_ZH-CN.md": "0d1ea60e8b7646c25e98e876bedc490ba269fbf6a8dba77c27120003de908f2f",
@@ -15,7 +15,7 @@
  "examples/codex/full-pipeline-heqa-scope-transformation/stages/stage4.5_final_integrity.md": "4a8ab2257c534d18fa03726edd25e4b89a0694ad0d6145b76e8c30c068e98cbc",
  "examples/codex/full-pipeline-heqa-scope-transformation/stages/stage4_revision_roadmap.md": "84695463d3489c6b1fb71cedfa67226f5625be1d27195e274b7c2ff2437819f1",
  "examples/codex/full-pipeline-heqa-scope-transformation/stages/stage6_process_summary.md": "c5531b592cdbe54571203854fade538aed2192dcebfd4e7337e08abd488414ac",
- "plugins/ars-codex-zh/.codex-plugin/plugin.json": "0fc0f6670a8ff1d1ae3aaef5c5aab9f8316c9b8f45c91a3f4c9882b857bd1847",
+ "plugins/ars-codex-zh/.codex-plugin/plugin.json": "53892fa9c47bac2b89d22cda3e653fa0e12d0b045896044c044f8703ac00dcf6",
  "skills/academic-research-suite/SKILL.md": "d85a1fd7563727e36f8e56e6ba5eb70583ebee1f52258fc84038bc64f3a25c53",
  "skills/academic-research-suite/agents/openai.yaml": "6bb45f355c84685538f13ae6cd26b3ba5481688ee8db13f26a9757726c462d9b",
  "skills/academic-research-suite/codex/README.md": "60dd33b3c0f5e79b7fa01e5bb21c289224d1a69bc5740462c2645c7c48327655",
