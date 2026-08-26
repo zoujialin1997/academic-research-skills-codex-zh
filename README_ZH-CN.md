@@ -49,7 +49,7 @@ skills/academic-research-suite/
 
 ## 版本管理
 
-本 ARS-Codex 打包版本为 `0.1.27`。repo 根目录的 `VERSION` 文件、`skills/academic-research-suite/SKILL.md` 中的元数据版本，以及 `skills/academic-research-suite/manifest.json` 中的 `adapter_version` 独立追踪 Codex 打包版本，与内嵌的 ARS 套件版本无关。内嵌的上游版本通过 commit 记录在 `manifest.source_repositories[]` 中。
+本 ARS-Codex 打包版本为 `0.4.0`。repo 根目录的 `VERSION` 文件、`skills/academic-research-suite/SKILL.md` 中的元数据版本，以及 `skills/academic-research-suite/manifest.json` 中的 `adapter_version` 独立追踪 Codex 打包版本，与内嵌的 ARS 套件版本无关。内嵌的上游版本通过 commit 记录在 `manifest.source_repositories[]` 中。
 
 打包层面的变更汇总在 [`CHANGELOG.md`](CHANGELOG.md) 中。
 

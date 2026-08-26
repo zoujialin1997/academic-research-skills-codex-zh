@@ -20,7 +20,7 @@ description: >
   /ars-cache-invalidate, /ars-rebuttal-audit, /ars-full。
   本技能在 ars/ 下内嵌了 ARS 角色提示词、参考资料、模板与共享交接模式。
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -32,7 +32,7 @@ allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(pyt
 
 ## 版本管理
 
-本 Codex 包版本为 `0.3.0`。仓库根目录的 `VERSION`、本 `SKILL.md` 的元数据版本，以及
+本 Codex 包版本为 `0.4.0`。仓库根目录的 `VERSION`、本 `SKILL.md` 的元数据版本，以及
 `manifest.json` 的 `adapter_version` 必须保持一致。内嵌 ARS 套件的版本由 `manifest.json` 中
 source repository 的 commit 单独跟踪。
 

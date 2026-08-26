@@ -4,6 +4,25 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [0.4.0] - 2026-08-27
+
+### What's Changed
+- Added a Chinese beginner tutorial `GETTING_STARTED_ZH-CN.md` covering everything
+  from installation to first use, the five typical scenarios with copy-paste
+  example prompts, a full worked example, and the new interactive patterns; added
+  a "新手从这里开始" entry link at the top of `README_ZH-CN.md` and updated its
+  version badge to `v0.4.0`.
+- Added a "新手引导" section to the `SKILL.md` router: when users say they are new,
+  do not know how to use the plugin, or ask for a tutorial, the router recommends
+  the tutorial and the `/ars-guide` interactive walkthrough; concrete tasks still
+  route normally.
+- Added the `/ars-guide` interactive onboarding command (`codex/commands/ars-guide.md`):
+  asks what the user wants to do first via fixed-option selection, then offers a
+  copy-paste example prompt for the chosen scenario and guides a first try, all
+  following the choice-card and plain-language terms protocols.
+- Bumped the Codex package version to `0.4.0` (MINOR) for the adapter behavior
+  change.
+
 ## [0.3.0] - 2026-08-26
 
 ### What's Changed
