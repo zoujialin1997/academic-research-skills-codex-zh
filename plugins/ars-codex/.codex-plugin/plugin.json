@@ -1,7 +1,7 @@
 {
   "name": "ars-codex",
   "version": "0.1.27",
-  "description": "ARS-Codex is the Codex-native sibling of Academic Research Skills for deep research, academic writing, manuscript review, research pipelines, and experiment planning.",
+  "description": "ARS-Codex 是 Academic Research Skills 面向 Codex 的原生发行版，用于深度研究、学术写作、稿件评审、研究管线与实验规划。",
   "author": {
     "name": "Imbad0202",
     "url": "https://github.com/Imbad0202"
@@ -23,8 +23,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "ARS-Codex",
-    "shortDescription": "Codex-native research, writing, review, and experiment workflows.",
-    "longDescription": "ARS-Codex is the Codex-native sibling of Academic Research Skills. It supports Socratic research scoping, literature and systematic reviews, IMRaD paper planning and drafting, manuscript revision coaching, peer-review simulation, citation and integrity checks, experiment planning, and staged research-to-paper workflows.",
+    "shortDescription": "面向 Codex 的深度研究、学术写作、稿件评审与实验规划工作流。",
+    "longDescription": "ARS-Codex 是 Academic Research Skills 面向 Codex 的原生发行版，支持苏格拉底式研究范围收敛、文献综述与系统综述、IMRaD 论文规划与起草、稿件修改辅导、同行评审模拟、引用与学术诚信核查、实验规划，以及分阶段的研究到论文工作流。",
     "developerName": "Imbad0202",
     "category": "Research",
     "capabilities": [
@@ -36,9 +36,9 @@
     "privacyPolicyURL": "https://github.com/Imbad0202/academic-research-skills-codex/blob/main/SECURITY.md",
     "termsOfServiceURL": "https://github.com/Imbad0202/academic-research-skills-codex/blob/main/LICENSE",
     "defaultPrompt": [
-      "Plan my academic paper from rough research notes.",
-      "Review my manuscript like a journal reviewer.",
-      "Build a literature review and identify research gaps."
+      "根据我的研究笔记规划学术论文。",
+      "像期刊审稿人一样评审我的稿件。",
+      "构建文献综述并识别研究空白。"
     ],
     "brandColor": "#2563EB"
   }

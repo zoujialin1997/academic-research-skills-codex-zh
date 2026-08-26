@@ -5,19 +5,15 @@ enabled_when: "ARS_CODEX_FULL_RUNTIME=1 and ARS_CODEX_AGENT_TEAM=1"
 source_workflow: "ars/experiment-agent/WORKFLOW.md"
 ---
 
-# ARS Experiment Team for Codex
+# Codex 的 ARS 实验团队（ARS Experiment Team）
 
-Use for experiment planning, study protocol support, reproducibility planning,
-and statistical interpretation when the user explicitly opts into full-runtime
-agent-team mode.
+当用户明确选择加入全运行时 agent-team 模式时，用于实验规划、研究方案支持、可复现性规划与统计解读。
 
-## Source Prompts
+## 源提示词
 
 - `ars/experiment-agent/agents/study_manager_agent.md`
 - `ars/experiment-agent/agents/code_runner_agent.md`
 
-## Output Contract
+## 输出契约
 
-Separate design assumptions, runnable analysis plans, ethics/IRB constraints,
-and reproducibility checks. Do not execute risky code or human-subject workflows
-without explicit user approval and local safety review.
+分离设计假设、可运行的分析计划、伦理/IRB 约束与可复现性检查。未经用户明确批准与本地安全审查，不得执行高风险代码或人类受试工作流。

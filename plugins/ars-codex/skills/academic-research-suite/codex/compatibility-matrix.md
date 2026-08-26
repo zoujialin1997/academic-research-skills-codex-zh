@@ -1,99 +1,62 @@
-# ARS-Codex Compatibility Matrix
+# ARS-Codex 兼容性矩阵（Compatibility Matrix）
 
-Audit date: 2026-08-24
+审计日期：2026-08-24
 
-## Provenance
+## 来源（Provenance）
 
-| Surface | Evidence |
+| 表面 | 证据 |
 |---|---|
-| Codex package repo | `academic-research-skills-codex` current working tree before release commit |
-| Upstream Claude Code repo | Tracked in `skills/academic-research-suite/manifest.json` |
-| Upstream suite version | `v3.21.1` |
-| Upstream component versions | deep-research `2.12.1`; academic-paper `3.3.1`; academic-paper-reviewer `1.11.1`; academic-pipeline `3.21.1` |
-| Codex package version | `0.1.27` |
-| License | CC BY-NC 4.0 in upstream and Codex package |
-| Upstream sync status | Vendored `ars/` content synced to the signed ARS release `v3.21.1` (peeled commit `127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`); Codex adapter profile retained |
-| Codex-only adapter location | `skills/academic-research-suite/codex/` |
+| Codex 包仓库 | `academic-research-skills-codex` 发布提交前的当前工作树 |
+| 上游 Claude Code 仓库 | 由 `skills/academic-research-suite/manifest.json` 跟踪 |
+| 上游套件版本 | `v3.21.1` |
+| 上游组件版本 | deep-research `2.12.1`；academic-paper `3.3.1`；academic-paper-reviewer `1.11.1`；academic-pipeline `3.21.1` |
+| Codex 包版本 | `0.1.27` |
+| 许可证 | 上游与 Codex 包均为 CC BY-NC 4.0 |
+| 上游同步状态 | vendored `ars/` 内容同步至已签署的 ARS 发行版 `v3.21.1`（peeled commit `127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`）；保留 Codex 适配器 profile |
+| Codex 专属适配器位置 | `skills/academic-research-suite/codex/` |
 
-## Matrix
+## 矩阵
 
-| Capability | Default Codex Status | Optional Full-Runtime Profile | Parity Level | Implementation Location | Verification Method | Remaining Risk |
+| 能力 | 默认 Codex 状态 | 可选全运行时 Profile | 对齐级别 | 实现位置 | 验证方法 | 剩余风险 |
 |---|---|---|---|---|---|---|
-| Install / update | Native `ars-codex` plugin from the repo marketplace, with direct skill install retained as an alternative | No change to runtime profile | near | `.agents/plugins/marketplace.json`, `plugins/ars-codex/`, `README.md` | plugin validator; `desktop-plugin-bundle` gate; `/skills` | Marketplace users must refresh the Git snapshot before reinstalling an update |
-| `ars-*` aliases | Root router emulates Claude command intent | Deterministic planner emits the same alias route metadata | near | `SKILL.md`, `codex/full-runtime-manifest.json`, `codex/scripts/ars_codex_full_runtime.py` | adapter pytest; manifest gate | Slash-prefixed input can still be intercepted by a client |
-| Vague paper-topic routing | Root router sends vague paper topics to non-generation Socratic scoping; non-convergence never authorizes system-authored candidate questions | Planner preserves the same override and requires an explicit user-request exit | near | `SKILL.md`, `ars/deep-research/references/socratic_mode_protocol.md`, `codex/scripts/ars_codex_full_runtime.py` | adapter pytest; upstream router and non-generation contract tests | Natural-language routing is still heuristic outside smoke cases |
-| Agent prompts | `agents/*.md` are read inline as role/phase prompts | `codex/agents/*.md` provides opt-in agent-team templates pointing back to source prompts | near | `ars/*/agents/*.md`, `codex/agents/*.md` | manifest gate; reviewer fixture gate | Actual subagent availability depends on the active Codex runtime |
-| Agent least privilege | Protected top-level agent `tools:` allowlists remain role boundaries; inline use does not widen authority | Dispatched protected roles receive no Bash or network transport; the dispatcher owns cross-model transport | near | `ars/agents/*.md`, `ars/scripts/check_tools_allowlist.py`, `SKILL.md` | upstream tools-allowlist lint and tests | Actual enforcement still depends on the active Codex runtime's tool controls |
-| Data-access declarations | All four core workflows retain the upstream dirtiest-input `raw` declaration; the separately vendored experiment-agent is also pinned `raw` | Full-runtime metadata preserves the declarations without turning them into permissions | near | `ars/scripts/check_data_access_level.py`, `ars/scripts/test_check_data_access_level.py`, `ars/experiment-agent/WORKFLOW.md` | deterministic data-access lint and hermetic mutation tests | An annotation is not a sandbox, declassification, isolation proof, or runtime permission boundary |
-| Reviewer independence | Inline mode must preserve independent reviewer sections before synthesis | Agent-team planner orders independent reviewer sections before editorial synthesis | near | `codex/agents/paper-reviewer-panel.md`, `codex/tests/fixtures/reviewer_full_independent_sections.md` | reviewer fixture gate; adapter pytest | Inline runs rely on faithfully preserving section boundaries |
-| Reviewer scoring and provenance honesty | Live review uses evidence-anchored categorical criterion judgements and remains `NOT_CALIBRATED`; no points, weights, totals, averages, ranking, or binary independence claim | Full-runtime carries six observable panel-provenance axes without using confidence as a weighting rule | near | `ars/scripts/check_reviewer_scoring_honesty.py`, `ars/scripts/review_panel_provenance.py`, `codex/full-runtime-manifest.json` | upstream honesty and provenance tests; adapter manifest validation | Categorical judgement still requires substantive expert reasoning; provenance is not proof of independence |
-| Executable panel synthesis | Reviewer artifacts can be checked with the vendored closed-grammar panel checker | Planner exposes the checker as a review quality gate | near | `ars/scripts/check_panel_synthesis.py`, `codex/full-runtime-manifest.json` | upstream panel checker tests | The checker validates artifact self-consistency, not substantive correctness |
-| Hooks and update reminder | Upstream Claude hooks and the v3.18 SessionStart update checker are metadata only | Disabled-by-default read-only Codex hook pack; no automatic upstream update check | partial | `ars/scripts/ars_update_check.sh`, `codex/hooks/hooks.json`, `codex/scripts/ars_codex_hook.py` | `hook-safety` gate; upstream update-check tests | Plugin users refresh and re-add the marketplace package; direct skill users reinstall or pull |
-| Model routing | Heavy `ars-full`, `ars-reviewer`, and `ars-revision-coach` routes have no v3.21.1 model frontmatter and inherit the session model; light routes retain `sonnet` metadata | Planner reports `inherit` or the light-route hint without forcing model changes | partial | `codex/full-runtime-manifest.json`, `codex/scripts/ars_codex_full_runtime.py` | adapter pytest; plan inspection | Not equivalent to Claude Code model pinning |
-| ARS model tiering | Unset preserves the active Codex model | Planner surfaces `economy` / `quality-boost` as advisory metadata; classification is applied only when per-dispatch model selection exists | partial | `ars/shared/model_tiering.md`, `ars/scripts/model_tiering_manifest.json`, `codex/scripts/ars_codex_full_runtime.py` | upstream tiering lint; adapter pytest | Codex runtimes may not expose relative-tier or per-dispatch model control |
-| Material Passport | Prompt/procedure plus vendored validators | Full-runtime manifest exposes passport reset as a quality gate | near | `ars/scripts/check_passport_reset_contract.py`, `codex/full-runtime-manifest.json` | upstream validator; adapter gate | Runtime context isolation is procedural, not a hard sandbox |
-| Research-workflow profile substrate | Default-off deterministic selection records an explicit profile or visible `field_general` fallback; manuscript content is never used to infer a research family | Manifest records the standalone option and contract test but does not add a planner or pipeline hook | partial | `ars/scripts/research_workflow_profile.py`, `ars/shared/contracts/research_workflow/`, `ars/shared/research_workflow_profiles/field_general.json` | hermetic profile/schema/correction tests | Behavioral evidence is `NOT_RUN`; no family-specific shipped profile, usability result, or research-outcome claim exists |
-| Inquiry branch ledger alpha | Exact flag `ARS_INQUIRY_LEDGER=1` enables a local durable event ledger; publication begins with the second branch and summaries appear only at bounded checkpoints | Manifest registers the contract test but never sets the flag or performs ledger writes automatically | near | `ars/scripts/inquiry_branch_ledger.py`, `ars/shared/contracts/research_workflow/inquiry_branch_ledger.schema.json`, `ars/shared/contracts/passport/inquiry_ledger_ref.schema.json` | hermetic append, path, lock, recovery, stale-cause, and prompt-wiring tests | Default off; author events are attestations, and no novelty, correctness, value, recovery-benefit, or usability claim is established |
-| Citation cache staleness and re-validation | Cached verification remains the default; stale rows are advisory-only | Planner surfaces the threshold and whether live re-validation was requested | near | `ars/scripts/verification_cache.py`, `ars/scripts/verification_gate/`, `codex/scripts/ars_codex_full_runtime.py` | upstream cache/gate tests; adapter pytest | Live re-validation depends on external bibliographic services |
-| Local-PDF read integrity | Locally read PDFs receive the structural preflight before page anchors are trusted; `--classify-content` optionally adds a process-isolated text/OCR advisory | Planner contract requires Stage 1 sidecars, freshness checks, and distinct FAIL/UNAVAILABLE handling; classification never changes the `STRUCTURE_ONLY` verdict scope | near | `ars/scripts/pdf_read_preflight.py`, `ars/scripts/pdf_content_classifier_worker.py`, `ars/requirements-pdf-content-classifier.txt` | upstream preflight/classifier tests; boundary validator | Missing optional dependencies produce deterministic `UNAVAILABLE`; classifier output is not an automatic OCR or anchor gate |
-| Human-read scope | Every new mark requires a user-owned `read_scope`; explicit unknown and legacy missing scope remain `coverage_unknown`, and partial coverage remains visible | Orchestrator carries the scope and runs the deterministic resolver on every finalizer pass | near | `ars/scripts/ars_mark_read.py`, `ars/scripts/human_read_attestation_resolver.py`, `ars/shared/contracts/passport/human_read_log.schema.json` | upstream mark-read, resolver, and finalizer tests | A user attestation is not proof of reading or comprehension |
-| Revision claim-drift guards | Claim-strength changes, conserved tokens, and the separate disposition sidecar are checked advisory-first for every revision round | Planner carries the Revision-Evidence Bundle without treating a disposition as author adjudication | near | `ars/shared/references/claim_strength_ladder.md`, `ars/scripts/check_revision_token_conservation.py`, `ars/scripts/claim_strength_drift_disposition.py` | upstream mutation, disposition, and held-out measurement tests | Semantic authorization still requires reviewer and author judgement |
-| Evidence-bound revision authority | Evidence rows replay against explicit source bytes; revision roadmaps remain non-ranking proposals and exact changes require a separate author adjudication | Full-runtime handoffs carry the source-bound rows, roadmap, author-adjudication sidecar, and Revision-Evidence Bundle without inventing author choices | near | `ars/scripts/evidence_rows.py`, `ars/scripts/revision_roadmap.py`, `ars/scripts/adjudication_activity.py`, `ars/shared/handoff_schemas.md` | evidence-row, roadmap, adjudication, and integration validators | Deterministic artifacts establish traceability, not substantive correctness; activity capture is best-effort and advisory |
-| Review-target and criteria binding | Review context is author-confirmed and resolved by pointer; the illustrative MSR 2027 Technical Papers × Full Paper profile carries source receipts and exact three-consumer binding | One manifest carries selected criteria across formative, internal, and external review without changing verdicts or editorial arithmetic | near | `ars/scripts/resolve_review_target_context.py`, `ars/scripts/review_criteria_binding.py`, `ars/shared/review_criteria_registry.json`, `ars/shared/review_criteria_sources/` | review-target, source-receipt, migration, and three-consumer binding tests | One source-backed proving set is not venue/discipline breadth, a real-author attestation, expert readiness, or evidence of constructive-review value |
-| Human-subjects authority | Review-ethics and data-protection profiles resolve independently from exact authority pointers; unresolved applicability blocks profile-dependent output | Traces remain institution-owned navigation aids and never become review-board decisions, authorization, readiness, or legal advice | near | `ars/scripts/resolve_human_subjects_authority.py`, `ars/scripts/build_review_pathway_rule_trace.py`, `ars/shared/references/irb_terminology_glossary.md` | human-subjects schema, output-contract, pathway, and migration validators | Institutional determination and current local authority still require the responsible human institution |
-| Bibliographic and preregistration advisories | Bibliographic/retraction signals preserve provenance, disagreement, staleness, and degradation; preregistration consistency is replay-bound and nonblocking | Carriers travel as advisories without replacing citation-finalizer policy or rewriting documents | near | `ars/scripts/bibliographic_integrity_signals.py`, `ars/scripts/retraction_status.py`, `ars/scripts/build_cross_document_consistency_advisory.py` | bibliographic, retraction, and cross-document consistency tests | These artifacts are not clean-document certificates, agreement findings, or evidence of classifier/advisory efficacy |
-| Bibliographic network routing | Ordinary discovery and inline ingest use Codex browsing; `ars-full` alone does not launch the four Python resolver clients | The planner preserves the same boundary; an explicit programmatic-verification request is required before the script-backed client gate is run | partial | `SKILL.md`, `README.md`, `ars/docs/DATA_FLOWS.md`, `codex/full-runtime-manifest.json` | adapter pytest; router-policy test; documentation review | This intentionally differs from upstream script-backed Stage 2.5/4.5 auto-invocation; once explicitly invoked, cache misses can make live metadata calls |
-| Citation / claim / temporal integrity | Vendored validators preserve high-impact-first sampling plus exact-span/raw-byte coverage over registered E1 claims | Planner surfaces relevant gates and the replayable coverage pointer | near | `ars/academic-pipeline/references/claim_verification_protocol.md`, `ars/scripts/claim_registry_coverage.py`, `ars/scripts/temporal_integrity_audit.py`, `codex/full-runtime-manifest.json` | upstream validators, coverage contract, and adapter tests | Registry coverage does not establish semantic extraction completeness; external metadata/API checks require configuration |
-| Bounded claim-standing and ideation evaluation | The v3.21 offer, query-plan, consent, freshness, and transmission sequence remains user-requested and advisory; blind ideation assignment stays opt-in evaluation infrastructure | Full-runtime records provenance and unmeasured fields without using the outputs as workflow authority | near | `ars/scripts/build_claim_standing_query_plan.py`, `ars/scripts/check_claim_standing_freshness.py`, `ars/scripts/check_claim_standing_transmissions.py`, `ars/scripts/claim_standing_stance_runner.py`, `ars/scripts/ideation_diversity_assignment_gate.py` | upstream hermetic query-plan, wiring, freshness, transmission, runner, renderer, and assignment tests | Outputs do not certify claim correctness, diversity, or generalization; eligibility never authorizes a call |
-| Data-flow, control, capability, risk, and governance transparency | The v3.21.1 maps and registers include the profile/ledger rows and 21 degradation mechanisms with evidence labels and residual gaps intact | Full-runtime metadata registers relevant validators for manual execution; the planner does not execute transparency gates or convert them into effectiveness evidence | near | `ars/docs/DATA_FLOWS.md`, `ars/docs/CONTROL_AVAILABILITY.md`, `ars/docs/STAGE_CAPABILITY_MATRIX.md`, `ars/docs/RISK_REGISTER.md`, `ars/GOVERNANCE.md` | upstream data-flow, control, capability, risk-register, and degradation validators | Documentation conformance, maintainer assertions, and Claude-hook traceability are not proof that Codex hooks are active, effective, certified, or ready |
-| Cross-model verification | Disabled by default; explicit provider/content/cost consent is required. `gpt-5.6-sol` is validated only for the ChatGPT-subscription citation route and remains provisional on the first-party API route | Canonical handoffs, the fixed Reviewer 2 seat, and the re-review judge pass retain dispatcher-owned provider transport; the Codex selector is citation-only and never widens to those calls | near | `README.md`, `SKILL.md`, `ars/shared/cross_model_verification.md`, `ars/scripts/cross_model_handoff.py`, `ars/scripts/cross_model_codex_transport.py` | hermetic handoff/contract and fake app-server tests; manual consent-bound live smoke only | Login attestation may arrive on stdout or stderr; the provider schema omits `uniqueItems` but local duplicate refusal remains; the bounded search host stays available while `code_mode` is disabled and the closed event grammar remains fail-closed |
-| Codex transport post-terminal drain | A `turn/completed` event is provisional until the parent exits cleanly and stdout/stderr reach EOF; late events remain subject to all protocol and grounding checks | Same closed acceptance boundary applies when the citation transport is invoked from a planned Stage 2.5/4.5 gate | near | `ars/scripts/cross_model_codex_transport.py`, `ars/scripts/test_cross_model_codex_transport.py` | hermetic late-event, hang/reap, cap, malformed, nonzero-exit, and stderr fixtures | Drain timeout, reader failure, or a late forbidden event makes the transport visibly unavailable rather than accepting a partial result |
-| Promotion bakeoff preregistration | Sealed commitment/reveal contracts, the retained 2026-08-19 measurement artifacts, and hermetic lifecycle tests are vendored | Manifest registers only the hermetic contract suite, never the live fleet or direct history-dependent tree verifier | partial | `ars/scripts/check_promotion_bakeoff_preregistration.py`, `ars/shared/contracts/cross_model/promotion_bakeoff_sealed_*.schema.json`, `ars/evals/bakeoff/` | temp-repository unit tests; upstream-only full-history `verify-tree` | A re-rooted vendor snapshot cannot independently re-prove upstream public seal/reveal chronology or authorize a live, consent/cost-bearing model fleet |
-| Degradation provenance | Machine-readable registry records 21 graceful-degradation mechanisms and their downstream effects, including newly indexed upstream write-scope guard launcher states | Full-runtime metadata registers the registry checker for manual validation | near | `ars/shared/contracts/degradation_registry.json`, `ars/scripts/check_degradation_registry.py` | upstream registry tests | Upstream Claude-hook rows are traceability only here; Codex runtime outages still require honest reporting and no effectiveness claim |
-| Pipeline terminal semantics | Stage 5 entry/completion and Stage 6 decline/terminal acknowledgement follow the pinned upstream contract | Planner exposes the whole-file boundary lock | near | `ars/academic-pipeline/WORKFLOW.md`, `ars/scripts/check_pipeline_boundary_semantics.py` | upstream boundary tests | Interactive clients may express acknowledgement with different natural language |
-| Upstream lock provenance | `manifest.json` pins upstream commits | Quality gate checks the package manifest has a full upstream SHA and required included paths | near | `manifest.json`, `codex/scripts/ars_codex_quality_gates.py` | `upstream-lock` gate | Future upstream syncs still require deliberate manifest updates |
+| 安装 / 更新 | 来自仓库 marketplace 的原生 `ars-codex` 插件，保留直接 skill 安装作为替代 | 运行时不改变 profile | near | `.agents/plugins/marketplace.json`、`plugins/ars-codex/`、`README.md` | plugin validator；`desktop-plugin-bundle` 闸门；`/skills` | marketplace 用户在重新安装更新前必须刷新 Git 快照 |
+| `ars-*` 别名 | 根路由器模拟 Claude 命令意图 | 确定性 planner 发出相同别名路由元数据 | near | `SKILL.md`、`codex/full-runtime-manifest.json`、`codex/scripts/ars_codex_full_runtime.py` | adapter pytest；manifest 闸门 | 斜杠前缀输入仍可能被客户端拦截 |
+| 模糊论文主题路由 | 根路由器将模糊论文主题发送至非生成 Socratic 收敛；未收敛绝不授权系统代写候选问题 | Planner 保留相同覆盖，并要求显式用户请求退出 | near | `SKILL.md`、`ars/deep-research/references/socratic_mode_protocol.md`、`codex/scripts/ars_codex_full_runtime.py` | adapter pytest；上游路由与非生成契约测试 | 冒烟场景之外自然语言路由仍是启发式的 |
+| Agent 提示词 | `agents/*.md` 作为角色/阶段提示内联读取 | `codex/agents/*.md` 提供指向源提示词的选择加入 agent-team 模板 | near | `ars/*/agents/*.md`、`codex/agents/*.md` | manifest 闸门；reviewer 夹具闸门 | 实际子 agent 可用性取决于活动 Codex 运行时 |
+| Agent 最小权限 | 受保护的顶级 agent `tools:` 白名单仍是角色边界；内联使用不扩大权限 | 派发的受保护角色不获得 Bash 或网络传输；dispatcher 拥有跨模型传输 | near | `ars/agents/*.md`、`ars/scripts/check_tools_allowlist.py`、`SKILL.md` | 上游 tools-allowlist lint 与测试 | 实际执行仍取决于活动 Codex 运行时的工具控制 |
+| 数据访问声明 | 四个核心工作流均保留上游最脏输入 `raw` 声明；单独 vendored 的 experiment-agent 也钉定为 `raw` | 全运行时元数据保留声明而不将其变成权限 | near | `ars/scripts/check_data_access_level.py`、`ars/scripts/test_check_data_access_level.py`、`ars/experiment-agent/WORKFLOW.md` | 确定性数据访问 lint 与封闭变异测试 | 标注不是沙箱、降密、隔离证明或运行时权限边界 |
+| 审稿人独立性 | 内联模式必须在综合前保留独立审稿人章节 | Agent-team planner 在编辑部综合前排列独立审稿人章节 | near | `codex/agents/paper-reviewer-panel.md`、`codex/tests/fixtures/reviewer_full_independent_sections.md` | reviewer 夹具闸门；adapter pytest | 内联运行依赖忠实保留章节边界 |
+| 审稿人评分与来源诚实性 | 实时评审使用证据锚定的分类标准判断并保持 `NOT_CALIBRATED`；无分数、权重、总计、平均、排名或二元独立性声明 | 全运行时携带六个可观察面板来源轴，而不用置信度作为加权规则 | near | `ars/scripts/check_reviewer_scoring_honesty.py`、`ars/scripts/review_panel_provenance.py`、`codex/full-runtime-manifest.json` | 上游诚实性与来源测试；adapter manifest 验证 | 分类判断仍需要实质专家推理；来源不是独立性的证明 |
+| 可执行面板综合 | 审稿人产物可用 vendored 封闭语法面板检查器检查 | Planner 将检查器暴露为评审质量门 | near | `ars/scripts/check_panel_synthesis.py`、`codex/full-runtime-manifest.json` | 上游面板检查器测试 | 检查器验证产物自洽性，而非实质正确性 |
+| Hooks 与更新提醒 | 上游 Claude hooks 与 v3.18 SessionStart 更新检查器仅为元数据 | 默认禁用的只读 Codex hook 包；无自动上游更新检查 | partial | `ars/scripts/ars_update_check.sh`、`codex/hooks/hooks.json`、`codex/scripts/ars_codex_hook.py` | `hook-safety` 闸门；上游更新检查测试 | 插件用户刷新并重新添加 marketplace 包；直接 skill 用户重装或 pull |
+| 模型路由 | 重型 `ars-full`、`ars-reviewer` 与 `ars-revision-coach` 路由无 v3.21.1 模型 frontmatter 并继承会话模型；轻路由保留 `sonnet` 元数据 | Planner 报告 `inherit` 或轻路由提示而不强制模型变更 | partial | `codex/full-runtime-manifest.json`、`codex/scripts/ars_codex_full_runtime.py` | adapter pytest；计划检查 | 与 Claude Code 模型钉定不等价 |
+| ARS 模型分层 | 未设置时保留活动 Codex 模型 | Planner 将 `economy` / `quality-boost` 呈现为建议性元数据；仅当存在按派发模型选择时应用分类 | partial | `ars/shared/model_tiering.md`、`ars/scripts/model_tiering_manifest.json`、`codex/scripts/ars_codex_full_runtime.py` | 上游 tiering lint；adapter pytest | Codex 运行时可能不暴露相对层级或按派发模型控制 |
+| Material Passport | 提示/流程加上 vendored 验证器 | 全运行时 manifest 将 passport 重置暴露为质量门 | near | `ars/scripts/check_passport_reset_contract.py`、`codex/full-runtime-manifest.json` | 上游验证器；adapter 闸门 | 运行时上下文隔离是程序性的，而非硬沙箱 |
+| 研究工作流 profile 底座 | 默认关闭的确定性选择记录显式 profile 或可见 `field_general` 回退；稿件内容绝不用于推断研究家族 | Manifest 记录独立选项与契约测试，但不添加 planner 或管线 hook | partial | `ars/scripts/research_workflow_profile.py`、`ars/shared/contracts/research_workflow/`、`ars/shared/research_workflow_profiles/field_general.json` | 封闭 profile/schema/修正测试 | 行为证据为 `NOT_RUN`；不存在家族特定随附 profile、可用性结果或研究结果声明 |
+| 查询分支台账 alpha | 精确标志 `ARS_INQUIRY_LEDGER=1` 启用本地持久事件台账；从第二分支开始发布，摘要仅在受限检查点出现 | Manifest 注册契约测试，但绝不自动设置标志或执行台账写入 | near | `ars/scripts/inquiry_branch_ledger.py`、`ars/shared/contracts/research_workflow/inquiry_branch_ledger.schema.json`、`ars/shared/contracts/passport/inquiry_ledger_ref.schema.json` | 封闭追加、路径、锁、恢复、过期原因与提示接线测试 | 默认关闭；作者事件是自证，不确立新颖性、正确性、价值、恢复收益或可用性声明 |
+| 引文缓存时效与再验证 | 缓存验证保持默认；过期行仅建议性 | Planner 呈现阈值以及是否请求了实时再验证 | near | `ars/scripts/verification_cache.py`、`ars/scripts/verification_gate/`、`codex/scripts/ars_codex_full_runtime.py` | 上游 cache/gate 测试；adapter pytest | 实时再验证依赖外部文献服务 |
+| 本地 PDF 读取完整性 | 本地读取的 PDF 在信任页面 anchor 前接收结构 preflight；`--classify-content` 可选添加进程隔离的文本/OCR 建议 | Planner 契约要求 Stage 1 sidecar、时效检查与独立的 FAIL/UNAVAILABLE 处理；分类绝不改变 `STRUCTURE_ONLY` 判定范围 | near | `ars/scripts/pdf_read_preflight.py`、`ars/scripts/pdf_content_classifier_worker.py`、`ars/requirements-pdf-content-classifier.txt` | 上游 preflight/classifier 测试；边界验证器 | 缺失可选依赖产生确定性 `UNAVAILABLE`；classifier 输出不是自动 OCR 或 anchor 闸门 |
+| 人工已读范围 | 每个新标记要求用户拥有的 `read_scope`；显式 unknown 与遗留缺失范围保持 `coverage_unknown`，部分覆盖保持可见 | Orchestrator 携带范围并在每次定稿 pass 运行确定性 resolver | near | `ars/scripts/ars_mark_read.py`、`ars/scripts/human_read_attestation_resolver.py`、`ars/shared/contracts/passport/human_read_log.schema.json` | 上游 mark-read、resolver 与定稿器测试 | 用户自证不是阅读或理解的证明 |
+| 修改 claim 漂移防护 | 每个修改轮次以建议性优先检查 claim 强度变化、守恒 token 与独立处置 sidecar | Planner 携带 Revision-Evidence Bundle，而不将处置视为作者裁定 | near | `ars/shared/references/claim_strength_ladder.md`、`ars/scripts/check_revision_token_conservation.py`、`ars/scripts/claim_strength_drift_disposition.py` | 上游变异、处置与 held-out 测量测试 | 语义授权仍需要审稿人与作者判断 |
+| Promotion bakeoff 预注册 | sealed 承诺/揭示契约、保留的 2026-08-19 测量产物与封闭生命周期测试被 vendored | Manifest 仅注册封闭契约套件，绝不注册实时 fleet 或直接依赖历史的树验证器 | partial | `ars/scripts/check_promotion_bakeoff_preregistration.py`、`ars/shared/contracts/cross_model/promotion_bakeoff_sealed_*.schema.json`、`ars/evals/bakeoff/` | 临时仓库单元测试；仅上游全历史 `verify-tree` | 重新定根的 vendor 快照无法独立再证明上游公开 seal/reveal 时间线，或授权承载同意/成本的实时模型 fleet |
+| 退化来源 | 机器可读注册表记录 21 个优雅退化机制及其下游效果，包括新索引的上游写范围防护 launcher 状态 | 全运行时元数据将注册表检查器注册为手动验证 | near | `ars/shared/contracts/degradation_registry.json`、`ars/scripts/check_degradation_registry.py` | 上游注册表测试 | 上游 Claude-hook 行此处仅为可追溯性；Codex 运行时故障仍要求诚实报告且无有效性声明 |
+| 管线终端语义 | Stage 5 入口/完成与 Stage 6 decline/终止确认遵循钉定的上游契约 | Planner 暴露整文件边界锁 | near | `ars/academic-pipeline/WORKFLOW.md`、`ars/scripts/check_pipeline_boundary_semantics.py` | 上游边界测试 | 交互式客户端可能用不同自然语言表达确认 |
+| 上游锁定来源 | `manifest.json` 钉定上游 commits | 质量门检查包 manifest 具有完整上游 SHA 与必需 included paths | near | `manifest.json`、`codex/scripts/ars_codex_quality_gates.py` | `upstream-lock` 闸门 | 未来上游同步仍需要审慎的 manifest 更新 |
 
-## Exact Degradations Relative To Claude Code
+## 相对 Claude Code 的确切退化
 
-- Codex does not register native Claude slash commands; `ars-*` aliases are
-  parsed by the root skill and optional full-runtime planner.
-- Codex full-runtime agent-team mode is opt-in and planner/template based.
-  Inline execution remains the default.
-- ARS-Codex has its own native Codex marketplace package; Claude-specific
-  plugin commands, slash-command registration, and hook lifecycle are not reproduced.
-- Claude Code `SessionStart` and future `SubagentStop` hooks are not installed
-  automatically. The v3.18 update reminder therefore remains inactive; the
-  Codex hook pack is manual and read-only.
-- Heavy routes inherit the active Codex session model; light-route `sonnet`
-  frontmatter is preserved as metadata. Neither changes the model unless the
-  user/runtime explicitly overrides it.
-- `ARS_MODEL_TIERING` preserves the upstream agent classification, but cannot
-  force economy or quality-boost routing without a runtime model override.
-- External cross-model verification is never simulated silently.
-- The fixed Reviewer 2 track and Priority-1 re-review judge pass require an
-  external provider plus explicit content consent; otherwise the required
-  single-family or fallback disclosure is emitted.
-- Dispatched owner roles do not perform cross-model transport themselves; the
-  dispatching Codex context validates the canonical envelope and transports
-  only its payload after the existing consent gate.
-- The contained Codex citation transport is an explicit citation-only selector,
-  requires Codex CLI 0.147.0+, `ARS_CROSS_MODEL`, the exact
-  `Logged in using ChatGPT` attestation, and content/cost consent; it never
-  falls back automatically to an API or expands to reviewer calls.
-- Requesting `ars-full` alone does not launch the four Python bibliographic
-  resolver clients in this adapter. Programmatic citation verification requires
-  a separate explicit request; this is an intentional runtime divergence from
-  upstream script-backed Stage 2.5/4.5 invocation.
-- Optional PDF content classification requires the separately pinned dependency.
-  Its output remains an advisory with `STRUCTURE_ONLY` verdict scope; dependency
-  absence is visible and cannot be promoted to structural `PASS`.
-- Source-bound evidence rows, author-adjudication records, review-target
-  bindings, human-subjects traces, and bibliographic/preregistration carriers
-  provide deterministic provenance, not author choices, institutional approval,
-  legal advice, integrity verdicts, or clean-document certificates.
-- The citation transport does not accept on `turn/completed` alone. It drains
-  through clean process exit and both output EOFs, so late malformed or
-  forbidden events can still fail the run visibly.
-- The vendored snapshot preserves promotion-bakeoff audit artifacts, schemas,
-  and hermetic tests, but cannot independently re-prove the upstream Git
-  seal/reveal chronology because canonical complete history is not vendored.
+- Codex 不注册原生 Claude 斜杠命令；`ars-*` 别名由根 skill 与可选全运行时 planner 解析。
+- Codex 全运行时 agent-team 模式为选择加入且基于 planner/模板。内联执行保持默认。
+- ARS-Codex 有自己的原生 Codex marketplace 包；Claude 专属插件命令、斜杠命令注册与 hook 生命周期不被复现。
+- Claude Code `SessionStart` 与未来 `SubagentStop` hooks 不会自动安装。因此 v3.18 更新提醒保持非活动；Codex hook 包为手动且只读。
+- 重型路由继承活动 Codex 会话模型；轻路由 `sonnet` frontmatter 保留为元数据。除非用户/运行时显式覆盖，两者都不改变模型。
+- `ARS_MODEL_TIERING` 保留上游 agent 分类，但无法在无运行时模型覆盖时强制 economy 或 quality-boost 路由。
+- 外部跨模型验证绝不静默模拟。
+- 固定 Reviewer 2 轨道与 Priority-1 再评审评委 pass 需要外部提供商加上显式内容同意；否则发出所需的单家族或回退披露。
+- 派发的 owner 角色自身不执行跨模型传输；派发 Codex 上下文在现有同意闸门之后校验规范外壳并仅传输其 payload。
+- 受限 Codex 引文传输是显式仅引文选择器，需要 Codex CLI 0.147.0+、`ARS_CROSS_MODEL`、精确 `Logged in using ChatGPT` 认证与内容/成本同意；它绝不自动回退到 API 或扩展到审稿人调用。
+- 仅请求 `ars-full` 不会在此适配器中启动四个 Python 文献 resolver 客户端。程序化引文验证需要单独显式请求；这是对上游脚本支持的 Stage 2.5/4.5 调用的有意运行时分歧。
+- 可选 PDF 内容分类需要单独钉定的依赖。其输出仍为 `STRUCTURE_ONLY` 判定范围的建议；依赖缺失可见，不能被提升为结构 `PASS`。
+- 来源绑定证据行、作者裁定记录、评审目标绑定、人类受试者轨迹与文献/预注册载体提供确定性来源，而非作者选择、机构批准、法律建议、完整性判定或干净文档证书。
+- 引文传输不单独接受 `turn/completed`。它通过干净进程退出与两个输出 EOF 排空，因此迟到的格式错误或禁止事件仍可可见地使运行失败。
+- vendored 快照保留 promotion-bakeoff 审计产物、模式与封闭测试，但因未 vendored 规范完整历史而无法独立再证明上游 Git seal/reveal 时间线。
