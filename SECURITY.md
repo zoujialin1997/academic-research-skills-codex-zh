@@ -16,7 +16,7 @@ issue**.
 
 Instead, use GitHub's **private vulnerability reporting**:
 
-1. Go to the [Security Advisories](https://github.com/Imbad0202/academic-research-skills-codex/security/advisories) page.
+1. Go to the [Security Advisories](https://github.com/zoujialin1997/academic-research-skills-codex-zh/security/advisories) page.
 2. Click **"Report a vulnerability"**.
 3. Include what you found, how to reproduce it, affected versions or commits,
    and the potential impact.
@@ -49,7 +49,7 @@ The following are out of scope:
 - AI output quality issues such as weak arguments, hallucinations, or incomplete
   literature coverage, unless they are caused by a security-relevant bypass.
 - General installation problems, feature requests, or non-security bugs - use
-  [Issues](https://github.com/Imbad0202/academic-research-skills-codex/issues)
+  [Issues](https://github.com/zoujialin1997/academic-research-skills-codex-zh/issues)
   instead.
 - Upstream ARS behavior that is not specific to the Codex distribution; report
   those in the upstream [academic-research-skills](https://github.com/Imbad0202/academic-research-skills)

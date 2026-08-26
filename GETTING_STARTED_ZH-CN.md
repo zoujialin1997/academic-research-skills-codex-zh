@@ -23,7 +23,7 @@ ARS-Codex 是一个装在 Codex（OpenAI 的编程与任务代理）里的「学
 安装步骤详见 [`README_ZH-CN.md`](README_ZH-CN.md) 的「安装 ARS-Codex Plugin」章节，要点如下：
 
 - 通过 Codex 添加插件源并安装：
-  `codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main`，然后
+  `codex plugin marketplace add zoujialin1997/academic-research-skills-codex-zh --ref main`，然后
   `codex plugin add ars-codex-zh@ars-codex-zh`。
 - 在 Codex 桌面版中也可以从「插件」页添加本仓库，再安装 **ARS-Codex**。
 - 安装后**打开一个新对话**，输入 `/skills` 应看到唯一一个 `academic-research-suite`（或 `ARS-Codex`）条目。

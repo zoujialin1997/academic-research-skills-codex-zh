@@ -6,8 +6,8 @@
     "name": "Imbad0202",
     "url": "https://github.com/Imbad0202"
   },
-  "homepage": "https://github.com/Imbad0202/academic-research-skills-codex",
-  "repository": "https://github.com/Imbad0202/academic-research-skills-codex",
+  "homepage": "https://github.com/zoujialin1997/academic-research-skills-codex-zh",
+  "repository": "https://github.com/zoujialin1997/academic-research-skills-codex-zh",
   "license": "CC-BY-NC-4.0",
   "keywords": [
     "academic",
@@ -32,9 +32,9 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/Imbad0202/academic-research-skills-codex",
-    "privacyPolicyURL": "https://github.com/Imbad0202/academic-research-skills-codex/blob/main/SECURITY.md",
-    "termsOfServiceURL": "https://github.com/Imbad0202/academic-research-skills-codex/blob/main/LICENSE",
+    "websiteURL": "https://github.com/zoujialin1997/academic-research-skills-codex-zh",
+    "privacyPolicyURL": "https://github.com/zoujialin1997/academic-research-skills-codex-zh/blob/main/SECURITY.md",
+    "termsOfServiceURL": "https://github.com/zoujialin1997/academic-research-skills-codex-zh/blob/main/LICENSE",
     "defaultPrompt": [
       "根据我的研究笔记规划学术论文。",
       "像期刊审稿人一样评审我的稿件。",

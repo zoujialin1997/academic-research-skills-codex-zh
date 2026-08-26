@@ -79,7 +79,7 @@ intentionally excluded.
 Add the GitHub marketplace and install ARS-Codex with Codex CLI:
 
 ```bash
-codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
+codex plugin marketplace add zoujialin1997/academic-research-skills-codex-zh --ref main
 codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
@@ -94,7 +94,7 @@ In Codex Desktop, you can alternatively add the repository from **Plugins** and
 then install **ARS-Codex**:
 
 ```text
-Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
+Marketplace source: https://github.com/zoujialin1997/academic-research-skills-codex-zh.git
 Branch/ref: main
 Plugin: ars-codex-zh
 ```
@@ -116,7 +116,7 @@ credentialed GitHub access both work consistently:
 
 ```bash
 python3 "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zoujialin1997/academic-research-skills-codex-zh \
   --ref main \
   --path skills/academic-research-suite \
   --method git
@@ -131,7 +131,7 @@ To update an existing install:
 ```bash
 rm -rf "$HOME/.codex/skills/academic-research-suite"
 python3 "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zoujialin1997/academic-research-skills-codex-zh \
   --ref main \
   --path skills/academic-research-suite \
   --method git

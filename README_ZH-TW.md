@@ -66,7 +66,7 @@ field-general fallback 不推斷研究家族、啟用 ledger 不授權外部呼�
 透過 Codex CLI 加入 GitHub marketplace 並安裝 ARS-Codex：
 
 ```bash
-codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
+codex plugin marketplace add zoujialin1997/academic-research-skills-codex-zh --ref main
 codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
@@ -81,7 +81,7 @@ codex plugin add ars-codex-zh@ars-codex-zh
 **ARS-Codex**：
 
 ```text
-Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
+Marketplace source: https://github.com/zoujialin1997/academic-research-skills-codex-zh.git
 Branch/ref: main
 Plugin: ars-codex-zh
 ```
@@ -101,7 +101,7 @@ GitHub 存取都能一致運作：
 
 ```bash
 python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zoujialin1997/academic-research-skills-codex-zh \
   --ref main \
   --path skills/academic-research-suite \
   --method git
@@ -112,7 +112,7 @@ python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-g
 ```bash
 rm -rf "$HOME/.codex/skills/academic-research-suite"
 python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zoujialin1997/academic-research-skills-codex-zh \
   --ref main \
   --path skills/academic-research-suite \
   --method git

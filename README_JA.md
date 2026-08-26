@@ -48,7 +48,7 @@ Claude Code ネイティブのスキルレイアウト、Claude 固有の agent-
 Codex CLI で GitHub marketplace を追加し、ARS-Codex をインストールします。
 
 ```bash
-codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
+codex plugin marketplace add zoujialin1997/academic-research-skills-codex-zh --ref main
 codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
@@ -63,7 +63,7 @@ Codex Desktop では、**Plugins** からこのリポジトリを追加し、
 **ARS-Codex** をインストールすることもできます。
 
 ```text
-Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
+Marketplace source: https://github.com/zoujialin1997/academic-research-skills-codex-zh.git
 Branch/ref: main
 Plugin: ars-codex-zh
 ```
@@ -81,7 +81,7 @@ Plugin を使わず、このリポジトリパスからスキルを直接イン�
 
 ```bash
 python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zoujialin1997/academic-research-skills-codex-zh \
   --ref main \
   --path skills/academic-research-suite \
   --method git
@@ -92,7 +92,7 @@ python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-g
 ```bash
 rm -rf "$HOME/.codex/skills/academic-research-suite"
 python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo Imbad0202/academic-research-skills-codex \
+  --repo zoujialin1997/academic-research-skills-codex-zh \
   --ref main \
   --path skills/academic-research-suite \
   --method git
