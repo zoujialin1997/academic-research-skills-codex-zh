@@ -48,14 +48,14 @@ Codex CLI で GitHub marketplace を追加し、ARS-Codex をインストール�
 
 ```bash
 codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
-codex plugin add ars-codex@ars-codex
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 後で plugin を更新する場合：
 
 ```bash
-codex plugin marketplace upgrade ars-codex
-codex plugin add ars-codex@ars-codex
+codex plugin marketplace upgrade ars-codex-zh
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 Codex Desktop では、**Plugins** からこのリポジトリを追加し、
@@ -64,10 +64,10 @@ Codex Desktop では、**Plugins** からこのリポジトリを追加し、
 ```text
 Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
 Branch/ref: main
-Plugin: ars-codex
+Plugin: ars-codex-zh
 ```
 
-Plugin ルートは `plugins/ars-codex/` です。`skills/` にはシンボリックリンクではなく
+Plugin ルートは `plugins/ars-codex-zh/` です。`skills/` にはシンボリックリンクではなく
 `academic-research-suite` の実体コピーが含まれるため、Windows の Codex Desktop
 plugin キャッシュでも bundled skill を正しく登録できます。
 
@@ -253,7 +253,7 @@ ARS は元々 Claude Code 向けに作成されました。この Codex パッ�
 
 | アップストリーム ARS 機能 | Codex パッケージの動作 |
 |---|---|
-| インストール可能な単一プラグイン | 単一の `academic-research-suite` skill を同梱するネイティブ Codex plugin `ars-codex` |
+| インストール可能な単一プラグイン | 単一の `academic-research-suite` skill を同梱するネイティブ Codex plugin `ars-codex-zh` |
 | `/ars-*` スラッシュコマンド | スキルルータ経由で `ars-*` エイリアスとしてエミュレート。ネイティブのスラッシュコマンドではありません |
 | `skills/` シンボリックリンクから自動検出される4つのアップストリームスキル | 単一の Codex ルータスキルがワークフローを選択し、ベンダリングされたワークフロー `WORKFLOW.md` ファイルを読み込みます |
 | プラグイン同梱の agent | agent ファイルはロール/フェーズプロンプトです。ユーザーが明示的に委譲サブ agent を要求しない限り、Codex はインラインで実行します |
@@ -275,7 +275,7 @@ ARS は元々 Claude Code 向けに作成されました。この Codex パッ�
 | 改訂 claim-drift ガード | v3.20 の非ランキング roadmap と author-adjudication contract を、claim-strength ladder、revision-evidence bundle、deterministic token-conservation checker、held-out 測定セットと組み合わせます |
 | Panel／degradation／pipeline-boundary の実行可能チェック | hermetic テストとともにベンダリングされ、オプションの full-runtime manifest から公開されます |
 | SessionStart および SubagentStop hooks（更新通知を含む） | トレーサビリティのためのみベンダリングされています。Codex は Claude hooks をインストールまたは実行しません |
-| Plugin marketplace の更新 | `codex plugin marketplace upgrade ars-codex` の後に `ars-codex@ars-codex` を再追加します。Skill の直接インストールは引き続き再インストールまたは pull で更新します |
+| Plugin marketplace の更新 | `codex plugin marketplace upgrade ars-codex-zh` の後に `ars-codex-zh@ars-codex-zh` を再追加します。Skill の直接インストールは引き続き再インストールまたは pull で更新します |
 | Claude Code Agent Team | 自動ではありません。Codex サブ agent には委譲または並列 agent の明示的なユーザー要求が必要です |
 | アップストリームドキュメントのクロスモデル provider ディスパッチ | デフォルトでは無効。provider 設定とユーザー同意が明示された場合のみ使用できます |
 

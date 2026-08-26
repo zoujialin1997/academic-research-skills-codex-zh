@@ -19,7 +19,7 @@
 | `skills/academic-research-suite/SKILL.md` | Codex 路由器，skill 入口 | 适配层，汉化重点 |
 | `skills/academic-research-suite/codex/` | Codex 专属适配层（agents / hooks / scripts / tests） | 适配层 |
 | `skills/academic-research-suite/ars/` | **上游 vendored 内容**（5 个工作流 + docs / shared / references / templates / agents） | 禁止手工编辑 |
-| `plugins/ars-codex/` | 插件打包；其 `skills/` 是 `skills/` 的物化副本（非 symlink） | 与源保持逐字节一致 |
+| `plugins/ars-codex-zh/` | 插件打包；其 `skills/` 是 `skills/` 的物化副本（非 symlink） | 与源保持逐字节一致 |
 | `examples/` | Codex 平台示例 | 可改 |
 | `scripts/` | 本仓库自有工具（非 vendored），如同步防护脚本 | 可改 |
 | `README*.md` / `CHANGELOG.md` 等根文档 | 项目文档 | 可改 |
@@ -33,7 +33,7 @@
 - 涉及 `ars/` 的版本疑问一律以 `manifest.json` 的 `source_repositories[].commit` 锁定版本为准
 
 ### 2. 双副本必须保持一致
-- `skills/academic-research-suite/` 与 `plugins/ars-codex/skills/` 是同一内容的**两份物化副本**（非 symlink，Windows 兼容需要）
+- `skills/academic-research-suite/` 与 `plugins/ars-codex-zh/skills/` 是同一内容的**两份物化副本**（非 symlink，Windows 兼容需要）
 - 任何对 skill 的改动都必须同步到两边，否则插件安装内容会不一致
 - 修改后必须验证两边逐字节一致（用防护脚本，见「同步上游」）
 
@@ -43,17 +43,17 @@
 - 升级包版本时必须三处同步更新（详见「版本管理」）
 
 ### 4. 汉化范围约定
-- 汉化只做 **Codex 适配层**：`SKILL.md`、`codex/`、`plugins/ars-codex/.codex-plugin/plugin.json`、`agents/openai.yaml`、`examples/`、根文档（`README_ZH-CN.md` 等）
+- 汉化只做 **Codex 适配层**：`SKILL.md`、`codex/`、`plugins/ars-codex-zh/.codex-plugin/plugin.json`、`agents/openai.yaml`、`examples/`、根文档（`README_ZH-CN.md` 等）
 - `ars/` 内的 references / templates / agent 角色提示词**保留英文原版**：避免与上游 sync 冲突，也避免降低提示词质量
 - 中文 README 命名约定：`README_ZH-CN.md`（简体）、`README_ZH-TW.md`（繁体）、`README_JA.md`（日文）、`README.md`（英文）
 
 ### 5. 汉化适配层受同步保护（不可被覆盖）
-- **同步的写入目标只能是 `skills/academic-research-suite/ars/`**；禁止把上游内容覆盖到 `skills/academic-research-suite/` 顶层或 `plugins/ars-codex/` 的适配层文件上
+- **同步的写入目标只能是 `skills/academic-research-suite/ars/`**；禁止把上游内容覆盖到 `skills/academic-research-suite/` 顶层或 `plugins/ars-codex-zh/` 的适配层文件上
 - 以下「受保护文件」在每次同步后必须与同步前**逐字节一致**（只有有意编辑时才能改）：
   - `skills/academic-research-suite/SKILL.md`
   - `skills/academic-research-suite/agents/openai.yaml`
   - `skills/academic-research-suite/codex/`（整个目录）
-  - `plugins/ars-codex/.codex-plugin/plugin.json`
+  - `plugins/ars-codex-zh/.codex-plugin/plugin.json`
   - `examples/`（整个目录）
   - `README.md`、`README_ZH-CN.md`、`README_ZH-TW.md`、`README_JA.md`、`CHANGELOG.md`
 - 用 `scripts/verify_localization_guard.py --check` 强制校验（失败即退出非零，禁止提交）
@@ -82,7 +82,7 @@
 1. 用上游 fresh clone 按 `manifest.json` 的 `included_paths` 重新拷贝 `ars/`（同时处理 `experiment-agent`）
 2. 遵守 `excluded_patterns`（`.claude/`、`.claude-plugin/`、`docs/superpowers/`、showcase PDF、`*.log` 等）
 3. 更新 `manifest.json`：写入新 commit、新 `generated_date`；上游新增脚本若在 Codex 环境不适用，须登记进 `inactive_upstream_scripts` 并说明原因
-4. **刷新插件副本**：把整个 `skills/academic-research-suite/` 复制到 `plugins/ars-codex/skills/`（必须整体复制以保留适配层，而不是只复制新的 `ars/`）
+4. **刷新插件副本**：把整个 `skills/academic-research-suite/` 复制到 `plugins/ars-codex-zh/skills/`（必须整体复制以保留适配层，而不是只复制新的 `ars/`）
 5. 校验版本一致性（铁律 3）
 6. **重新汉化适配**（铁律 6，核心步骤）：
    - 运行 `python scripts/verify_localization_guard.py --check`，读取 `[DRIFT]` 报告
@@ -181,7 +181,7 @@
   python scripts/verify_localization_guard.py --check
   ```
   - 校验受保护文件与 `scripts/localization_guard.manifest.json` 哈希一致
-  - 校验 `skills/academic-research-suite/` 与 `plugins/ars-codex/skills/` 逐字节一致
+  - 校验 `skills/academic-research-suite/` 与 `plugins/ars-codex-zh/skills/` 逐字节一致
   - 对照 `scripts/upstream_baseline.json` 报告上游漂移（`[DRIFT]`）并列出需重新适配的文件
   - 仅在**重新适配完成后**用 `--update` 重新生成两个清单
 - Codex 适配层测试（pytest）：

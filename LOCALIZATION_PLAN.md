@@ -23,7 +23,7 @@
 
 | 优先级 | 文件 | 现状 | 汉化动作 |
 |---|---|---|---|
-| P0 | `plugins/ars-codex/.codex-plugin/plugin.json` | 英文 | 插件市场展示文案中文化 |
+| P0 | `plugins/ars-codex-zh/.codex-plugin/plugin.json` | 英文 | 插件市场展示文案中文化 |
 | P0 | `skills/academic-research-suite/agents/openai.yaml` | 英文 | 展示名 / 默认提示中文化 |
 | P0 | `skills/academic-research-suite/SKILL.md` | 英文（路由描述无中文触发） | 描述加中文触发词；正文全中文 |
 | P1 | `skills/academic-research-suite/codex/README.md`、`codex/agents/*.md`（5 个）、`codex/compatibility-matrix.md` | 英文 | 中文化 |
@@ -113,7 +113,7 @@
 
 ## 七、每步完成标准（验证）
 
-1. 双副本同步：`skills/academic-research-suite/` 与 `plugins/ars-codex/skills/` 逐字节一致
+1. 双副本同步：`skills/academic-research-suite/` 与 `plugins/ars-codex-zh/skills/` 逐字节一致
 2. 防护脚本：`python scripts/verify_localization_guard.py --check` 退出码为 0
 3. 适配层测试：`python -m pytest skills/academic-research-suite/codex/tests`
 4. 中文冒烟：用中文提问逐一触发各工作流（深度研究 / 论文写作 / 稿件评审 / 完整管线 / 实验规划）

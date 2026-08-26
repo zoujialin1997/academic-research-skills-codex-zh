@@ -1,14 +1,14 @@
 {
-  "name": "ars-codex",
+  "name": "ars-codex-zh",
   "interface": {
-    "displayName": "ARS-Codex"
+    "displayName": "ARS-Codex 中文版"
   },
   "plugins": [
     {
-      "name": "ars-codex",
+      "name": "ars-codex-zh",
       "source": {
         "source": "local",
-        "path": "./plugins/ars-codex"
+        "path": "./plugins/ars-codex-zh"
       },
       "policy": {
         "installation": "AVAILABLE",

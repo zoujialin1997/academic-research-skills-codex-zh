@@ -16,7 +16,7 @@ Usage:
 Check failures (non-zero exit) mean one of:
   1. a protected adaptation-layer file changed outside an intentional edit
      (run --update only after an intentional edit);
-  2. the plugin copy under plugins/ars-codex/skills/ drifted from the source
+  2. the plugin copy under plugins/ars-codex-zh/skills/ drifted from the source
      skill tree (refresh it after every sync); or
   3. upstream vendored content changed since the last recorded baseline, so the
      corresponding adaptation must be re-checked and re-adapted (then run
@@ -52,7 +52,7 @@ PROTECTED_TREES = [
     "skills/academic-research-suite/SKILL.md",
     "skills/academic-research-suite/agents/openai.yaml",
     "skills/academic-research-suite/codex",
-    "plugins/ars-codex/.codex-plugin/plugin.json",
+    "plugins/ars-codex-zh/.codex-plugin/plugin.json",
     "examples",
     "README.md",
     "README_ZH-CN.md",
@@ -75,7 +75,7 @@ ADAPTATION_REFERENCE_FILES = [
 ]
 
 SOURCE_SKILL = REPO_ROOT / "skills/academic-research-suite"
-PLUGIN_SKILL = REPO_ROOT / "plugins/ars-codex/skills/academic-research-suite"
+PLUGIN_SKILL = REPO_ROOT / "plugins/ars-codex-zh/skills/academic-research-suite"
 UPSTREAM_ROOT = SOURCE_SKILL / "ars"
 SKILL_MANIFEST = SOURCE_SKILL / "manifest.json"
 

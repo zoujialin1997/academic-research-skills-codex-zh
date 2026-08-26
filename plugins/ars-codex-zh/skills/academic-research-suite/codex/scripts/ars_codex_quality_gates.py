@@ -20,7 +20,7 @@ PLUGIN_ROOT_CANDIDATE = SUITE_ROOT.parents[1]
 PLUGIN_ROOT = (
     PLUGIN_ROOT_CANDIDATE
     if (PLUGIN_ROOT_CANDIDATE / ".codex-plugin" / "plugin.json").is_file()
-    else SUITE_ROOT.parents[1] / "plugins" / "ars-codex"
+    else SUITE_ROOT.parents[1] / "plugins" / "ars-codex-zh"
 )
 FULL_RUNTIME_MANIFEST = CODEX_ROOT / "full-runtime-manifest.json"
 PACKAGE_MANIFEST = SUITE_ROOT / "manifest.json"
@@ -284,10 +284,10 @@ def check_desktop_plugin_bundle() -> list[str]:
 
     _require(plugin_manifest.is_file(), f"Desktop plugin manifest missing: {plugin_manifest}")
     manifest = _json(plugin_manifest)
-    _require(manifest.get("name") == "ars-codex", "Desktop plugin name must be ars-codex")
+    _require(manifest.get("name") == "ars-codex-zh", "Desktop plugin name must be ars-codex-zh")
     _require(
-        manifest.get("interface", {}).get("displayName") == "ARS-Codex",
-        "Desktop plugin display name must be ARS-Codex",
+        manifest.get("interface", {}).get("displayName") == "ARS-Codex 中文版",
+        "Desktop plugin display name must be ARS-Codex 中文版",
     )
     _require(
         PLUGIN_ROOT.name == manifest.get("name"),
@@ -304,20 +304,20 @@ def check_desktop_plugin_bundle() -> list[str]:
     marketplace_path = SUITE_ROOT.parents[1] / ".agents" / "plugins" / "marketplace.json"
     if marketplace_path.is_file():
         marketplace = _json(marketplace_path)
-        _require(marketplace.get("name") == "ars-codex", "repo marketplace name must be ars-codex")
+        _require(marketplace.get("name") == "ars-codex-zh", "repo marketplace name must be ars-codex-zh")
         _require(
-            marketplace.get("interface", {}).get("displayName") == "ARS-Codex",
-            "repo marketplace display name must be ARS-Codex",
+            marketplace.get("interface", {}).get("displayName") == "ARS-Codex 中文版",
+            "repo marketplace display name must be ARS-Codex 中文版",
         )
-        entries = [entry for entry in marketplace.get("plugins", []) if entry.get("name") == "ars-codex"]
-        _require(len(entries) == 1, "repo marketplace must contain exactly one ars-codex entry")
+        entries = [entry for entry in marketplace.get("plugins", []) if entry.get("name") == "ars-codex-zh"]
+        _require(len(entries) == 1, "repo marketplace must contain exactly one ars-codex-zh entry")
         source = entries[0].get("source", {})
-        _require(source.get("source") == "local", "ars-codex marketplace source must be local")
-        _require(source.get("path") == "./plugins/ars-codex", "ars-codex marketplace path is incorrect")
+        _require(source.get("source") == "local", "ars-codex-zh marketplace source must be local")
+        _require(source.get("path") == "./plugins/ars-codex-zh", "ars-codex-zh marketplace path is incorrect")
         policy = entries[0].get("policy", {})
-        _require(policy.get("installation") == "AVAILABLE", "ars-codex must be available to install")
-        _require(policy.get("authentication") == "ON_INSTALL", "ars-codex auth policy must be ON_INSTALL")
-        _require(entries[0].get("category") == "Research", "ars-codex marketplace category must be Research")
+        _require(policy.get("installation") == "AVAILABLE", "ars-codex-zh must be available to install")
+        _require(policy.get("authentication") == "ON_INSTALL", "ars-codex-zh auth policy must be ON_INSTALL")
+        _require(entries[0].get("category") == "Research", "ars-codex-zh marketplace category must be Research")
 
     symlinks = sorted(
         str(path.relative_to(PLUGIN_ROOT))

@@ -66,14 +66,14 @@ field-general fallback 不推斷研究家族、啟用 ledger 不授權外部呼�
 
 ```bash
 codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
-codex plugin add ars-codex@ars-codex
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 日後更新 plugin：
 
 ```bash
-codex plugin marketplace upgrade ars-codex
-codex plugin add ars-codex@ars-codex
+codex plugin marketplace upgrade ars-codex-zh
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 在 Codex Desktop 中，也可以從 **Plugins** 加入此 repo，然後安裝
@@ -82,10 +82,10 @@ codex plugin add ars-codex@ars-codex
 ```text
 Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
 Branch/ref: main
-Plugin: ars-codex
+Plugin: ars-codex-zh
 ```
 
-Plugin 根目錄為 `plugins/ars-codex/`。其中的 `skills/` 是
+Plugin 根目錄為 `plugins/ars-codex-zh/`。其中的 `skills/` 是
 `academic-research-suite` 的實體副本而非符號連結，確保 Windows 上的 Codex
 Desktop plugin 快取也能正確註冊 bundled skill。
 
@@ -304,7 +304,7 @@ Codex adapter 對書目網路行為採以下明確邊界：
 
 | 上游 ARS 功能 | Codex 套件行為 |
 |---|---|
-| 單一可安裝 plugin | 原生 Codex plugin `ars-codex`，內含單一 `academic-research-suite` skill |
+| 單一可安裝 plugin | 原生 Codex plugin `ars-codex-zh`，內含單一 `academic-research-suite` skill |
 | `/ars-*` 斜線指令 | 透過 skill router 作為 `ars-*` 別名模擬；非原生斜線指令 |
 | 四個上游 skill 從 `skills/` 符號連結自動發現 | 單一 Codex router skill 選擇 workflow 並讀取內嵌的 workflow `WORKFLOW.md` 檔案 |
 | Plugin 隨附的 agent | Agent 檔案作為角色/階段提示詞；Codex 以內嵌方式執行，除非使用者明確要求委派子 agent |
@@ -327,7 +327,7 @@ Codex adapter 對書目網路行為採以下明確邊界：
 | 修訂主張漂移防護 | v3.20 非排序 roadmap 與 author-adjudication contract，搭配主張強度階梯、revision-evidence bundle、deterministic token-conservation checker 及 held-out 測量集 |
 | Panel／degradation／pipeline-boundary 可執行檢查 | 與 hermetic 測試一併內嵌，並由選用的 full-runtime manifest 公開 |
 | SessionStart 和 SubagentStop hooks（含更新提醒） | 僅為可追溯性而保留；Codex 不安裝或執行 Claude hooks |
-| Plugin marketplace 更新 | 執行 `codex plugin marketplace upgrade ars-codex` 後重新加入 `ars-codex@ars-codex`；直接安裝的 skill 仍以重新安裝或 pull 更新 |
+| Plugin marketplace 更新 | 執行 `codex plugin marketplace upgrade ars-codex-zh` 後重新加入 `ars-codex-zh@ars-codex-zh`；直接安裝的 skill 仍以重新安裝或 pull 更新 |
 | Claude Code Agent Team | 非自動；Codex 子 agent 需要使用者明確要求委派或平行 agent |
 | 上游文件中的跨模型 provider 分派 | 預設停用；只有在明確設定 provider 並取得使用者同意時才可使用 |
 

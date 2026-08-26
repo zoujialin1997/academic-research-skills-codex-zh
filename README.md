@@ -79,14 +79,14 @@ Add the GitHub marketplace and install ARS-Codex with Codex CLI:
 
 ```bash
 codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
-codex plugin add ars-codex@ars-codex
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 To update a plugin install later:
 
 ```bash
-codex plugin marketplace upgrade ars-codex
-codex plugin add ars-codex@ars-codex
+codex plugin marketplace upgrade ars-codex-zh
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 In Codex Desktop, you can alternatively add the repository from **Plugins** and
@@ -95,10 +95,10 @@ then install **ARS-Codex**:
 ```text
 Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
 Branch/ref: main
-Plugin: ars-codex
+Plugin: ars-codex-zh
 ```
 
-The plugin root is `plugins/ars-codex/`. Its `skills/` directory contains a
+The plugin root is `plugins/ars-codex-zh/`. Its `skills/` directory contains a
 materialized copy of `academic-research-suite`, not a symlink. This keeps
 Codex Desktop installs portable on Windows, where plugin caches may materialize
 symlinks as plain text files and skip bundled skill registration.
@@ -365,8 +365,8 @@ ARS was originally written for Claude Code. In this Codex package:
   protected-term conservation checks as advisory-first guards.
 - The upstream v3.18 SessionStart update checker is vendored but not installed
   or executed as a Codex hook. Plugin users update with
-  `codex plugin marketplace upgrade ars-codex` followed by
-  `codex plugin add ars-codex@ars-codex`; direct skill installs still update by
+  `codex plugin marketplace upgrade ars-codex-zh` followed by
+  `codex plugin add ars-codex-zh@ars-codex-zh`; direct skill installs still update by
   reinstalling or pulling this repository.
 - Upstream references to a "fresh Claude Code session" mean a new Codex
   conversation in this package; Material Passport reset semantics still apply.
@@ -392,7 +392,7 @@ boundary:
 
 | Upstream ARS feature | Codex package behavior |
 |---|---|
-| One installable plugin | Native Codex plugin `ars-codex`, bundling the single `academic-research-suite` skill |
+| One installable plugin | Native Codex plugin `ars-codex-zh`, bundling the single `academic-research-suite` skill |
 | `/ars-*` slash commands | Emulated as `ars-*` aliases through the skill router; not native slash commands |
 | Four upstream skills auto-discovered from `skills/` symlinks | Single Codex router skill selects the workflow and reads the vendored workflow `WORKFLOW.md` files |
 | Plugin-shipped agents | Agent files are role/phase prompts; Codex runs them inline unless the user explicitly asks for delegated subagents |
@@ -422,7 +422,7 @@ boundary:
 | Revision claim-drift guards | The v3.20 non-ranking roadmap and author-adjudication contract complement the claim-strength ladder, revision-evidence bundle, deterministic token-conservation checker, and held-out measurement set |
 | Executable panel/degradation/pipeline-boundary checks | Vendored with their hermetic tests and exposed by the optional full-runtime manifest |
 | SessionStart and SubagentStop hooks, including the update reminder | Vendored for traceability only; Codex does not install or execute Claude hooks |
-| Plugin marketplace update | Refresh with `codex plugin marketplace upgrade ars-codex`, then re-add `ars-codex@ars-codex`; direct skill installs still reinstall or pull |
+| Plugin marketplace update | Refresh with `codex plugin marketplace upgrade ars-codex-zh`, then re-add `ars-codex-zh@ars-codex-zh`; direct skill installs still reinstall or pull |
 | Claude Code Agent Team | Not automatic; Codex subagents require an explicit user request for delegation or parallel agents |
 | Cross-model provider dispatch from upstream docs | Disabled by default; available only with explicit provider configuration and explicit user consent |
 

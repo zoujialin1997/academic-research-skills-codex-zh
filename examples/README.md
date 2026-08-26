@@ -1,4 +1,4 @@
-# ars-codex 示例（examples）
+# ars-codex-zh 示例（examples）
 
 面向 `$academic-research-suite` skill 的 Codex 平台示例，按[上游 CONTRIBUTING.md § Platform ports L55](https://github.com/Imbad0202/academic-research-skills/blob/main/CONTRIBUTING.md#platform-ports-community-maintained-only)
 的回归证据要求提供。

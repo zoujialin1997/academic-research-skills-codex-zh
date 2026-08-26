@@ -19,7 +19,7 @@
 
 | 能力 | 默认 Codex 状态 | 可选全运行时 Profile | 对齐级别 | 实现位置 | 验证方法 | 剩余风险 |
 |---|---|---|---|---|---|---|
-| 安装 / 更新 | 来自仓库 marketplace 的原生 `ars-codex` 插件，保留直接 skill 安装作为替代 | 运行时不改变 profile | near | `.agents/plugins/marketplace.json`、`plugins/ars-codex/`、`README.md` | plugin validator；`desktop-plugin-bundle` 闸门；`/skills` | marketplace 用户在重新安装更新前必须刷新 Git 快照 |
+| 安装 / 更新 | 来自仓库 marketplace 的原生 `ars-codex-zh` 插件，保留直接 skill 安装作为替代 | 运行时不改变 profile | near | `.agents/plugins/marketplace.json`、`plugins/ars-codex-zh/`、`README.md` | plugin validator；`desktop-plugin-bundle` 闸门；`/skills` | marketplace 用户在重新安装更新前必须刷新 Git 快照 |
 | `ars-*` 别名 | 根路由器模拟 Claude 命令意图 | 确定性 planner 发出相同别名路由元数据 | near | `SKILL.md`、`codex/full-runtime-manifest.json`、`codex/scripts/ars_codex_full_runtime.py` | adapter pytest；manifest 闸门 | 斜杠前缀输入仍可能被客户端拦截 |
 | 模糊论文主题路由 | 根路由器将模糊论文主题发送至非生成 Socratic 收敛；未收敛绝不授权系统代写候选问题 | Planner 保留相同覆盖，并要求显式用户请求退出 | near | `SKILL.md`、`ars/deep-research/references/socratic_mode_protocol.md`、`codex/scripts/ars_codex_full_runtime.py` | adapter pytest；上游路由与非生成契约测试 | 冒烟场景之外自然语言路由仍是启发式的 |
 | Agent 提示词 | `agents/*.md` 作为角色/阶段提示内联读取 | `codex/agents/*.md` 提供指向源提示词的选择加入 agent-team 模板 | near | `ars/*/agents/*.md`、`codex/agents/*.md` | manifest 闸门；reviewer 夹具闸门 | 实际子 agent 可用性取决于活动 Codex 运行时 |

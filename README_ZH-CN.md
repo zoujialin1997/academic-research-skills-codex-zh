@@ -71,14 +71,14 @@ Claude/plugin 加载文件按设计排除。
 
 ```bash
 codex plugin marketplace add Imbad0202/academic-research-skills-codex --ref main
-codex plugin add ars-codex@ars-codex
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 以后更新 plugin：
 
 ```bash
-codex plugin marketplace upgrade ars-codex
-codex plugin add ars-codex@ars-codex
+codex plugin marketplace upgrade ars-codex-zh
+codex plugin add ars-codex-zh@ars-codex-zh
 ```
 
 在 Codex Desktop 中，也可以从 **Plugins** 添加此 repo，然后安装
@@ -87,10 +87,10 @@ codex plugin add ars-codex@ars-codex
 ```text
 Marketplace source: https://github.com/Imbad0202/academic-research-skills-codex.git
 Branch/ref: main
-Plugin: ars-codex
+Plugin: ars-codex-zh
 ```
 
-Plugin 根目录为 `plugins/ars-codex/`。其中的 `skills/` 是
+Plugin 根目录为 `plugins/ars-codex-zh/`。其中的 `skills/` 是
 `academic-research-suite` 的实体副本而不是符号链接，确保 Windows 上的
 Codex Desktop plugin 缓存也能正确注册 bundled skill。
 
@@ -294,7 +294,7 @@ ARS 最初是为 Claude Code 编写的。在本 Codex 打包版本中：
 - 本地读取的 PDF 在信任页面锚点之前会运行 v3.19 `pdf_read_preflight.py`。`FAIL` 与 `UNAVAILABLE` 保持区分，缺失解析器或 sidecar 绝不会被视为 `PASS`。
 - `ars-mark-read` 的每个新标记都必须带有用户声明的 `read_scope`。显式 unknown 与旧版无 scope 记录仍为 `coverage_unknown`；部分覆盖保持可见，Codex 不会推断全文阅读。
 - 修订轮次保留 v3.19 的主张强度阶梯，以及确定性的数字、引用、标记和受保护术语守恒检查，作为 advisory-first 防护。
-- 上游 v3.18 的 SessionStart 更新检查器已内嵌，但不会作为 Codex hook 安装或执行。插件用户通过 `codex plugin marketplace upgrade ars-codex` 后接 `codex plugin add ars-codex@ars-codex` 更新；直接安装的 skill 仍通过重装或拉取本仓库更新。
+- 上游 v3.18 的 SessionStart 更新检查器已内嵌，但不会作为 Codex hook 安装或执行。插件用户通过 `codex plugin marketplace upgrade ars-codex-zh` 后接 `codex plugin add ars-codex-zh@ars-codex-zh` 更新；直接安装的 skill 仍通过重装或拉取本仓库更新。
 - 上游对"新 Claude Code 会话"的引用在本包中等同于新的 Codex 对话；Material Passport 重置语义仍然适用。
 - 如果引用、来源、统计数据或期刊政策无法验证，Codex 应将其标记为未验证，而非编造支撑依据。
 
@@ -304,7 +304,7 @@ ARS 最初是为 Claude Code 编写的。在本 Codex 打包版本中：
 
 | 上游 ARS 功能 | Codex 打包版本行为 |
 |---|---|
-| 一个可安装的 plugin | 原生 Codex plugin `ars-codex`，内含单个 `academic-research-suite` skill |
+| 一个可安装的 plugin | 原生 Codex plugin `ars-codex-zh`，内含单个 `academic-research-suite` skill |
 | `/ars-*` 斜杠命令 | 通过 skill router 以 `ars-*` 别名模拟；非原生斜杠命令 |
 | 从 `skills/` 符号链接自动发现的四个上游 skill | 单个 Codex router skill 选择 workflow 并读取内嵌的 workflow `WORKFLOW.md` 文件 |
 | Plugin 附带的 agent | Agent 文件用作角色/阶段提示词；Codex 内联运行，除非用户明确要求委派子 agent |
@@ -328,7 +328,7 @@ ARS 最初是为 Claude Code 编写的。在本 Codex 打包版本中：
 | 修订主张漂移防护 | v3.20 非排序 roadmap 与 author-adjudication contract，配合主张强度阶梯、revision-evidence bundle、deterministic token-conservation checker 和 held-out 测量集 |
 | Panel／degradation／pipeline-boundary 可执行检查 | 连同 hermetic 测试一起内嵌，并由可选 full-runtime manifest 暴露 |
 | SessionStart 和 SubagentStop hook（含更新提醒） | 仅为可追溯性而内嵌保留；Codex 不安装或执行 Claude hook |
-| Plugin marketplace 更新 | 执行 `codex plugin marketplace upgrade ars-codex` 后重新添加 `ars-codex@ars-codex`；直接安装的 skill 仍通过重新安装或 pull 更新 |
+| Plugin marketplace 更新 | 执行 `codex plugin marketplace upgrade ars-codex-zh` 后重新添加 `ars-codex-zh@ars-codex-zh`；直接安装的 skill 仍通过重新安装或 pull 更新 |
 | Claude Code Agent Team | 非自动；Codex 子 agent 需要用户明确请求委派或并行 agent |
 | 上游文档中的跨模型 provider 调度 | 默认禁用；仅在明确配置 provider 并取得用户同意时可用 |
 
