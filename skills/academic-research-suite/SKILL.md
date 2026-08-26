@@ -20,7 +20,7 @@ description: >
   /ars-cache-invalidate, /ars-rebuttal-audit, /ars-full。
   本技能在 ars/ 下内嵌了 ARS 角色提示词、参考资料、模板与共享交接模式。
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -32,7 +32,7 @@ allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(pyt
 
 ## 版本管理
 
-本 Codex 包版本为 `0.2.0`。仓库根目录的 `VERSION`、本 `SKILL.md` 的元数据版本，以及
+本 Codex 包版本为 `0.3.0`。仓库根目录的 `VERSION`、本 `SKILL.md` 的元数据版本，以及
 `manifest.json` 的 `adapter_version` 必须保持一致。内嵌 ARS 套件的版本由 `manifest.json` 中
 source repository 的 commit 单独跟踪。
 
@@ -207,6 +207,16 @@ Codex 适配器覆盖。
    - 每项一行「编号. 选项名 —— 一句话说明」，末尾加「其他：请直接输入」；
    - 提示「请回复对应编号」。
 4. **优先级**：本协议覆盖上游 intent_clarification_protocol.md 中「不使用 AskUserQuestion、选项放正文」的限制；不改动 ars/ 文件；[direct-mode] 跳过澄清入口保持不变。
+
+## 专业术语通俗解释
+
+面向用户的所有输出（路由说明、工作流提问、模式选择、报告/评审输出）中，遇到专业术语时按以下方式处理：
+
+1. **首次出现即解释**：同一术语在同一会话中首次出现时，紧跟术语后加括号附一句通俗解释。例如：元分析（把多篇独立研究的结果合并统计，得出更可靠的结论）。
+2. **保留术语原文**：通俗解释是补充，不替换术语本身；解释用大白话，不超过一句话，且不引入新的专业词汇。
+3. **跟随会话语言**：中文会话用中文解释，英文/韩文会话用对应语言解释。
+4. **覆盖所有交互**：面向用户的提问与选项、工作流说明、模式名称、报告与评审结论中的术语都要解释；只供内部使用、用户不会直接看到的输出除外。
+5. **按需展开**：用户表示仍不理解或要求详细说明时，可展开成一小段通俗说明，但不改变原意、不省略必要信息。
 
 ## 安全边界
 
