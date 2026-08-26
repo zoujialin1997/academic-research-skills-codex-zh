@@ -4,10 +4,23 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [1.0.1] - 2026-08-27
+
 ### What's Changed
 - Re-attributed the plugin author to `zoujialin1997` in the plugin manifest
   (`author` and `developerName`) so the published plugin is credited to this
   distribution's owner.
+- Fixed install and support links to point at this distribution's repository
+  (`zoujialin1997/academic-research-skills-codex-zh`) instead of the upstream
+  repo: `codex plugin marketplace add`, Desktop marketplace source, direct
+  skill-installer `--repo` in all four READMEs and `GETTING_STARTED_ZH-CN.md`,
+  plus the `SECURITY.md` advisories / issues links and the plugin manifest
+  `homepage` / `repository` / website / privacy / terms URLs.
+- Updated the README set: added the `/ars-guide` alias row to all four READMEs,
+  added a "中文版新增功能" section to `README_ZH-CN.md`, and added beginner-tutorial
+  pointers to the EN / ZH-TW / JA READMEs.
+- Bumped the Codex package version to `1.0.1` (PATCH) for the metadata /
+  attribution corrections.
 
 ## [1.0.0] - 2026-08-27
 

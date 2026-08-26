@@ -8,7 +8,7 @@
 
 - 上游项目：[Imbad0202/academic-research-skills-codex](https://github.com/Imbad0202/academic-research-skills-codex)（ARS-Codex，Codex 原生学术研究套件）
 - 上游 ARS 内容源：[Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills)（Claude Code 版，被 vendored 内嵌）
-- 当前版本：Codex 包 `1.0.0`，内嵌 ARS `v3.21.1`
+- 当前版本：Codex 包 `1.0.1`，内嵌 ARS `v3.21.1`
 - 本仓库本质是**同步镜像 + Codex 适配层**，git 历史以 `chore: sync ARS vX @ commit` 这类同步提交为主
 
 ## 目录结构
@@ -38,7 +38,7 @@
 - 修改后必须验证两边逐字节一致（用防护脚本，见「同步上游」）
 
 ### 3. 版本一致性
-- `VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version`、`plugins/ars-codex-zh/.codex-plugin/plugin.json` 的 `version` 四者必须一致（当前 `1.0.0`）
+- `VERSION`、`SKILL.md` 的 `metadata.version`、`manifest.json` 的 `adapter_version`、`plugins/ars-codex-zh/.codex-plugin/plugin.json` 的 `version` 四者必须一致（当前 `1.0.1`）
 - 这三个值跟踪 **Codex 包版本**，与内嵌 ARS 套件版本（由 `manifest.json` 的 source commit 跟踪）相互独立
 - 升级包版本时必须四处同步更新（详见「版本管理」）
 

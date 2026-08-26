@@ -1,6 +1,6 @@
 # ARS-Codex
 
-[![Version](https://img.shields.io/badge/version-v1.0.0-blue)](VERSION)
+[![Version](https://img.shields.io/badge/version-v1.0.1-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 🚀 簡體中文新手教學 → [《新手快速上手》](GETTING_STARTED_ZH-CN.md)（僅簡體中文）；對話中輸入 `/ars-guide` 可取得互動式引導。
@@ -44,7 +44,7 @@ skills/academic-research-suite/
 
 ## 版本控制
 
-此 ARS-Codex 套件版本為 `1.0.0`。倉庫根目錄的 `VERSION` 檔案、
+此 ARS-Codex 套件版本為 `1.0.1`。倉庫根目錄的 `VERSION` 檔案、
 `skills/academic-research-suite/SKILL.md` 的 metadata 版本，
 以及 `skills/academic-research-suite/manifest.json` 的 `adapter_version`
 獨立追蹤 Codex 套件版本，與內嵌的 ARS 套件版本分開管理。
