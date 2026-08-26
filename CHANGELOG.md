@@ -4,11 +4,24 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [1.0.0] - 2026-08-27
+
 ### What's Changed
-- Corrected stale version references across `README.md`, `README_ZH-TW.md`,
-  `README_JA.md`, the compatibility matrix, `AGENTS.md`, and
-  `LOCALIZATION_PLAN.md` to the current package version `0.4.1` (display /
-  version-text consistency only; no behavior change, no version bump).
+- **First stable release (1.0.0).** The Chinese adaptation layer has reached a
+  stable, documented surface:
+  - 0.2.0: fixed-option choice-card protocol (clickable selection in Plan mode).
+  - 0.3.0: plain-language terms protocol (specialist terms explained in plain
+    Chinese on first occurrence).
+  - 0.4.0: Chinese beginner tutorial `GETTING_STARTED_ZH-CN.md`, a README entry
+    link, a "新手引导" router section, and the `/ars-guide` interactive
+    onboarding command.
+  - 0.4.1: localized the tutorial and `/ars-guide` to Chinese-first example
+    prompts with plain-language term explanations.
+- Corrected stale version references across the README set, the compatibility
+  matrix, `AGENTS.md`, and `LOCALIZATION_PLAN.md` to `1.0.0` (display /
+  version-text consistency only).
+- The four canonical version fields (`VERSION`, `SKILL.md` metadata,
+  `manifest.json` adapter_version, `plugin.json`) are all `1.0.0`.
 
 ## [0.4.1] - 2026-08-27
 

@@ -2,7 +2,7 @@
 
 > 文档状态：**P0/P1 已交付，P2 命令覆盖层已落地（v1 完成）**
 > 所属分支：`codex/zh-adapter-layer`
-> 适用仓库：`academic-research-skills-codex-zh`（ARS-Codex 中文适配镜像，Codex 包 `0.4.1` / 内嵌 ARS `v3.21.1`）
+> 适用仓库：`academic-research-skills-codex-zh`（ARS-Codex 中文适配镜像，Codex 包 `1.0.0` / 内嵌 ARS `v3.21.1`）
 
 ---
 

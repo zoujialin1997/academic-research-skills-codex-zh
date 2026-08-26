@@ -10,7 +10,7 @@
 | 上游 Claude Code 仓库 | 由 `skills/academic-research-suite/manifest.json` 跟踪 |
 | 上游套件版本 | `v3.21.1` |
 | 上游组件版本 | deep-research `2.12.1`；academic-paper `3.3.1`；academic-paper-reviewer `1.11.1`；academic-pipeline `3.21.1` |
-| Codex 包版本 | `0.4.1` |
+| Codex 包版本 | `1.0.0` |
 | 许可证 | 上游与 Codex 包均为 CC BY-NC 4.0 |
 | 上游同步状态 | vendored `ars/` 内容同步至已签署的 ARS 发行版 `v3.21.1`（peeled commit `127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`）；保留 Codex 适配器 profile |
 | Codex 专属适配器位置 | `skills/academic-research-suite/codex/` |
