@@ -20,3 +20,10 @@ source_workflow: "ars/deep-research/WORKFLOW.md"
 ## 输出契约
 
 每个 agent 工作产物必须标注证据、推断与建议。当前事实与引文需要对权威来源验证，或显式标记为未验证。
+
+## 文献获取
+
+`lit-review` / `systematic-review` / `full` 模式需要真实文献时，优先使用适配层
+`ars-search` / `ars-download` / `ars-read` 命令（用法见 `SKILL.md`「文献检索与全文获取」）：
+先 `ars-search` 检索，再 `ars-download` 下载合法全文，`ars-read` 提取文本后交给对应 agent 综合。
+下载默认只走合法开放获取渠道；Sci-Hub 需用户显式同意后才可尝试。

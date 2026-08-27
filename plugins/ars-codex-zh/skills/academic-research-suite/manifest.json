@@ -1,6 +1,6 @@
 {
   "name": "academic-research-suite",
-  "adapter_version": "1.0.1",
+  "adapter_version": "1.1.0",
   "version_file": "VERSION",
   "generated_for": "codex",
   "generated_date": "2026-08-24",
@@ -161,3 +161,4 @@
     "The separately vendored experiment-agent tree tracks its upstream v1.1.0 (session resume for study_manager_agent, study-state protocol and templates); its .claude/ and .github/ upstream dev files remain excluded and its entry file keeps the WORKFLOW.md rename with the Codex data_access_level/task_type frontmatter overlay."
   ]
 }
+

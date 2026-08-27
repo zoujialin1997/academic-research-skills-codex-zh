@@ -87,12 +87,15 @@
     {"aliases": ["/ars-reviewer", "ars-reviewer"], "recipe": "ars/commands/ars-reviewer.md", "workflow": "academic-paper-reviewer", "mode": "full", "model_hint": "inherit"},
     {"aliases": ["/ars-mark-read", "ars-mark-read"], "recipe": "ars/commands/ars-mark-read.md", "workflow": "academic-pipeline", "mode": "mark-read", "model_hint": "sonnet"},
     {"aliases": ["/ars-unmark-read", "ars-unmark-read"], "recipe": "ars/commands/ars-unmark-read.md", "workflow": "academic-pipeline", "mode": "unmark-read", "model_hint": "sonnet"},
-    {"aliases": ["/ars-cache-invalidate", "ars-cache-invalidate"], "recipe": "ars/commands/ars-cache-invalidate.md", "workflow": "academic-pipeline", "mode": "cache-invalidate", "model_hint": "sonnet"}
+    {"aliases": ["/ars-cache-invalidate", "ars-cache-invalidate"], "recipe": "ars/commands/ars-cache-invalidate.md", "workflow": "academic-pipeline", "mode": "cache-invalidate", "model_hint": "sonnet"},
+    {"aliases": ["/ars-search", "ars-search"], "recipe": "codex/commands/ars-search.md", "workflow": "deep-research", "mode": "search", "model_hint": "sonnet"},
+    {"aliases": ["/ars-download", "ars-download"], "recipe": "codex/commands/ars-download.md", "workflow": "deep-research", "mode": "download", "model_hint": "sonnet"},
+    {"aliases": ["/ars-read", "ars-read"], "recipe": "codex/commands/ars-read.md", "workflow": "deep-research", "mode": "read", "model_hint": "sonnet"}
   ],
   "workflows": {
     "deep-research": {
       "workflow_path": "ars/deep-research/WORKFLOW.md",
-      "modes": ["full", "quick", "socratic", "review", "lit-review", "three-way-scan", "fact-check", "systematic-review"],
+      "modes": ["full", "quick", "socratic", "review", "lit-review", "three-way-scan", "fact-check", "systematic-review", "search", "download", "read"],
       "agent_template": "codex/agents/deep-research-team.md",
       "agent_prompts": [
         "research_question_agent.md",
@@ -283,3 +286,4 @@
     "The vendored snapshot preserves sealed promotion-bakeoff contracts, audit artifacts, and hermetic tests, but cannot independently re-prove upstream seal/reveal chronology because it does not contain the complete canonical upstream Git history."
   ]
 }
+

@@ -17,10 +17,10 @@ description: >
   也用于 Claude 风格 ARS 命令别名，如 /ars-plan, ars-plan, /ars-outline, /ars-abstract,
   /ars-lit-review, /ars-citation-check, /ars-disclosure, /ars-format-convert, /ars-3w,
   /ars-revision-coach, /ars-revision, /ars-reviewer, /ars-mark-read, /ars-unmark-read,
-  /ars-cache-invalidate, /ars-rebuttal-audit, /ars-full。
+  /ars-cache-invalidate, /ars-rebuttal-audit, ars-search, ars-download, ars-read, /ars-full。
   本技能在 ars/ 下内嵌了 ARS 角色提示词、参考资料、模板与共享交接模式。
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -126,6 +126,9 @@ Codex 使用当前模型。
 | `/ars-cache-invalidate`, `ars-cache-invalidate` | `codex/commands/ars-cache-invalidate.md` | 使一个引文 key 的缓存验证条目失效 |
 | `/ars-full`, `ars-full` | `codex/commands/ars-full.md` | `ars/academic-pipeline/WORKFLOW.md` |
 | /ars-guide, ars-guide | codex/commands/ars-guide.md | 新手交互式引导（不进入具体工作流） |
+| `/ars-search`, `ars-search` | `codex/commands/ars-search.md` | 多源文献检索（Semantic Scholar / PubMed / arXiv / bioRxiv / medRxiv / Crossref），去重合并后返回带 DOI / PDF 链接的条目 |
+| `/ars-download`, `ars-download` | `codex/commands/ars-download.md` | 按 DOI 或 PDF URL 下载合法 PDF；默认只走合法开放获取，`--allow-scihub` 显式开启 Sci-Hub 回退 |
+| `/ars-read`, `ars-read` | `codex/commands/ars-read.md` | 本地 PDF 全文提取，供综述、引用与写作阶段使用 |
 
 如果别名后的请求体是模糊主题、暂定标题、研究方向或「題目/主題/方向」且没有清晰研究问题，
 在路由到别名目标模式之前，先遵循上方的论文主题范围收敛覆盖规则。这适用于 `ars-plan`、
@@ -133,6 +136,25 @@ Codex 使用当前模型。
 
 如果 Codex 客户端在请求到达模型前保留斜杠前缀输入，请告诉用户使用纯别名形式，例如
 `ars-plan my topic`。
+
+## 文献检索与全文获取
+
+本包原生提供免费的多源文献检索、合法下载与全文读取能力（无需 API key / 积分），
+通过 `ars-search` / `ars-download` / `ars-read` 三个命令触发：
+
+- `/ars-search`：跨 Semantic Scholar、PubMed、arXiv、bioRxiv、medRxiv、Crossref 多源检索，
+  去重合并后返回带 DOI / PDF 链接的条目列表。
+- `/ars-download`：按 DOI 或 PDF URL 下载 PDF 到本地。默认只走合法开放获取
+  （直接 / arXiv OA → Unpaywall 合法 OA）；仅当用户显式传入 `--allow-scihub` 时才回退到
+  Sci-Hub（请确保你对该内容拥有合法访问权）。
+- `/ars-read`：提取本地 PDF 的全文文本，供综述、引用与写作阶段使用。
+
+联动规则：在 `deep-research` 的 `lit-review` / `systematic-review` / `full` 模式及论文写作的
+文献阶段，需要真实文献时优先使用 `ars-search` 检索、`ars-download` 下载合法全文、
+`ars-read` 提取文本，再交给对应 agent 综合。
+
+运行时：命令通过 `python3 skills/academic-research-suite/codex/scripts/ars_codex_literature.py ...`
+调用，零第三方硬依赖；PDF 文本提取在已安装 `pypdf` 时质量更好。
 
 ## Codex 运行时映射
 
@@ -389,3 +411,4 @@ Scholar、OpenAlex 与 Crossref API 说明在 `ars/deep-research/references/` �
 - 对中文，除非用户另有要求，否则使用繁体中文。
 - 对分阶段工作流，显示当前阶段、必需输入、输出产物，以及下一闸门是可选还是强制。
 - 对论文/研究输出，保持不确定性显式，并将证据、推断与建议分离。
+
