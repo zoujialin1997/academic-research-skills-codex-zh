@@ -20,7 +20,7 @@ description: >
   /ars-cache-invalidate, /ars-rebuttal-audit, ars-search, ars-download, ars-read, /ars-full。
   本技能在 ars/ 下内嵌了 ARS 角色提示词、参考资料、模板与共享交接模式。
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)

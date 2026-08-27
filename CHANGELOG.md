@@ -4,6 +4,31 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+## [1.1.1] - 2026-08-27
+
+### What's Changed
+- Fixed `ars-download` so transient mid-read connection drops (`IncompleteRead` /
+  connection reset / read timeout) are retried instead of crashing with a raw
+  traceback.
+- Fixed `ars-read` so pypdf text extraction runs in an isolated child process;
+  on an uncatchable pypdf native crash the command now degrades to the stdlib
+  extractor instead of segfaulting (read never hard-crashes).
+- Backfilled the missing `1.1.0` changelog entry and refreshed the version
+  references in the README set to `1.1.1`.
+- Bumped the Codex package version to `1.1.1` (PATCH).
+
+## [1.1.0] - 2026-08-27
+
+### What's Changed
+- Added `ars-search` / `ars-download` / `ars-read`: multi-source academic
+  search, legal open-access PDF download, and local PDF full-text extraction
+  (adapted from `zoujialin1997/free-academic-search`; Sci-Hub stays off by
+  default and requires an explicit `--allow-scihub`).
+- Registered the three commands in `SKILL.md` routing, the full-runtime
+  manifest, and the compatibility matrix, and wired them into the deep-research
+  workflow.
+- Bumped the Codex package version to `1.1.0` (MINOR).
+
 ## [1.0.1] - 2026-08-27
 
 ### What's Changed
