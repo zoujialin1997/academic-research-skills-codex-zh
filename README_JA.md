@@ -158,6 +158,9 @@ ars-plan my paper on AI governance in universities.
 | `/ars-revision-coach` | `ars-revision-coach` | `academic-paper` `revision-coach` モード |
 | `/ars-revision` | `ars-revision` | `academic-paper` `revision` モード |
 | `/ars-full` | `ars-full` | `academic-pipeline` フルワークフロー |
+| `/ars-search` | `ars-search` | 複数ソースの学術検索（Semantic Scholar / PubMed / arXiv / bioRxiv / medRxiv / Crossref） |
+| `/ars-download` | `ars-download` | DOI または URL から合法的なオープンアクセス PDF をダウンロード（Sci-Hub はデフォルトで無効） |
+| `/ars-read` | `ars-read` | ローカル PDF の全文テキストを抽出 |
 | /ars-guide | ars-guide | 初心者向けインタラクティブガイド（ワークフローには入りません） |
 
 ### 作業パターン

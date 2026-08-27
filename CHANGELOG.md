@@ -4,6 +4,9 @@ All notable changes to the Codex package are documented here.
 
 ## Unreleased
 
+### What's Changed
+- Docs: fixed corrupted `ars-search` / `ars-download` / `ars-read` command names in `README_ZH-CN.md`, added the three literature command rows to the command tables of all four READMEs, and added a literature scenario row to `GETTING_STARTED_ZH-CN.md`.
+
 ## [1.1.1] - 2026-08-27
 
 ### What's Changed

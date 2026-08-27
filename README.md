@@ -217,6 +217,9 @@ ars-plan my paper on AI governance in universities.
 | `/ars-unmark-read` | `ars-unmark-read` | Rescind a prior human-read signal |
 | `/ars-cache-invalidate` | `ars-cache-invalidate` | Invalidate cached verification entries for one citation key |
 | `/ars-full` | `ars-full` | `academic-pipeline` full workflow |
+| `/ars-search` | `ars-search` | Multi-source academic search (Semantic Scholar / PubMed / arXiv / bioRxiv / medRxiv / Crossref) |
+| `/ars-download` | `ars-download` | Download a legal open-access PDF by DOI or URL (Sci-Hub off by default) |
+| `/ars-read` | `ars-read` | Extract full text from a local PDF |
 | /ars-guide | ars-guide | Interactive beginner onboarding (does not enter a workflow) |
 
 ### Working Pattern

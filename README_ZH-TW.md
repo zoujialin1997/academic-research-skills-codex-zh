@@ -186,6 +186,9 @@ ars-plan my paper on AI governance in universities.
 | `/ars-revision-coach` | `ars-revision-coach` | `academic-paper` `revision-coach` 模式 |
 | `/ars-revision` | `ars-revision` | `academic-paper` `revision` 模式 |
 | `/ars-full` | `ars-full` | `academic-pipeline` 完整 workflow |
+| `/ars-search` | `ars-search` | 多源學術檢索（Semantic Scholar / PubMed / arXiv / bioRxiv / medRxiv / Crossref） |
+| `/ars-download` | `ars-download` | 依 DOI 或 URL 下載合法開放獲取 PDF（Sci-Hub 預設關閉） |
+| `/ars-read` | `ars-read` | 擷取本機 PDF 全文文字 |
 | /ars-guide | ars-guide | 新手互動式引導（不進入具體工作流） |
 
 ### 使用模式
