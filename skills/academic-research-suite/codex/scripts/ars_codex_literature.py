@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -38,6 +39,9 @@ PAPER_FIELDS = [
     "citationCount", "doi", "pmid", "arxivId", "url", "pdfUrl",
     "openAccessPdf", "abstract", "externalIds", "categories",
 ]
+
+SCIHUB_MIRRORS = ["https://sci-hub.se", "https://sci-hub.st", "https://sci-hub.ru"]
+DEFAULT_UNPAYWALL_EMAIL = "free-academic-search@users.noreply.github.com"
 
 
 class LiteratureError(Exception):
@@ -67,6 +71,10 @@ def normalize_doi(doi: str | None) -> str:
 
 def normalize_title(title: str | None) -> str:
     return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", (title or "").lower())
+
+
+def is_pdf_payload(data: bytes) -> bool:
+    return data[:5] == b"%PDF-"
 
 
 def _http_get_bytes(
@@ -268,6 +276,96 @@ def merge_paper_lists(lists: list[list[dict[str, Any]]]) -> list[dict[str, Any]]
     return merged
 
 
+# --- download ---------------------------------------------------------------
+
+
+def _save_pdf(data: bytes, out_dir: str | Path, filename: str) -> dict[str, Any]:
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    dest = out / filename
+    dest.write_bytes(data)
+    return {"ok": True, "path": str(dest), "bytes": len(data)}
+
+
+def download_pdf_by_url(url: str, out_dir: str | Path, filename: str | None = None) -> dict[str, Any]:
+    data, _ = _http_get_bytes(url)
+    if not is_pdf_payload(data):
+        raise LiteratureError(f"not a PDF payload from {url}")
+    name = filename or (url.rsplit("/", 1)[-1].split("?")[0] or "paper.pdf")
+    if not name.lower().endswith(".pdf"):
+        name += ".pdf"
+    result = _save_pdf(data, out_dir, name)
+    result["source_url"] = url
+    return result
+
+
+def lookup_unpaywall(doi: str, email: str | None = None) -> str | None:
+    email = email or os.environ.get("ARS_UNPAYWALL_EMAIL") or DEFAULT_UNPAYWALL_EMAIL
+    url = f"https://api.unpaywall.org/v2/{urllib.parse.quote(normalize_doi(doi))}?email={urllib.parse.quote(email)}"
+    payload = _http_get_json(url)
+    best = payload.get("best_oa_location") or {}
+    return best.get("url_for_pdf") or best.get("url")
+
+
+def _download_scihub(doi: str, out_dir: str | Path) -> dict[str, Any]:
+    encoded = urllib.parse.quote(normalize_doi(doi), safe="")
+    for mirror in SCIHUB_MIRRORS:
+        try:
+            page_url = f"{mirror}/{encoded}"
+            html, _ = _http_get_bytes(page_url)
+            text = html.decode("utf-8", "replace")
+            match = re.search(r'(?:<iframe[^>]+src|<embed[^>]+src)="([^"]+\.pdf[^"]*)"', text, re.I)
+            if not match:
+                continue
+            pdf_url = urllib.parse.urljoin(page_url, match.group(1))
+            return download_pdf_by_url(pdf_url, out_dir, filename=f"{normalize_doi(doi).replace('/', '_')}.pdf")
+        except (LiteratureError, urllib.error.URLError):
+            continue
+    raise LiteratureError("Sci-Hub download failed on all mirrors")
+
+
+def download_pdf_by_doi(
+    doi: str,
+    out_dir: str | Path,
+    allow_scihub: bool = False,
+    unpaywall_email: str | None = None,
+) -> dict[str, Any]:
+    norm = normalize_doi(doi)
+    filename = f"{norm.replace('/', '_')}.pdf"
+    # 1. direct resolver -> PDF
+    try:
+        direct = f"https://doi.org/{urllib.parse.quote(norm, safe='')}"
+        data, _ = _http_get_bytes(direct)
+        if is_pdf_payload(data):
+            result = _save_pdf(data, out_dir, filename)
+            result["via"] = "direct"
+            result["source_url"] = direct
+            return result
+    except LiteratureError:
+        pass
+    # 2. Unpaywall legal OA
+    try:
+        oa_url = lookup_unpaywall(norm, unpaywall_email)
+        if oa_url:
+            result = download_pdf_by_url(oa_url, out_dir, filename=filename)
+            result["via"] = "unpaywall"
+            return result
+    except LiteratureError:
+        pass
+    # 3. Sci-Hub (opt-in only)
+    if allow_scihub:
+        try:
+            result = _download_scihub(norm, out_dir)
+            result["via"] = "scihub"
+            return result
+        except LiteratureError:
+            pass
+    raise LiteratureError(
+        f"no downloadable PDF found for DOI {norm} "
+        "(legal OA only; pass --allow-scihub to try Sci-Hub)"
+    )
+
+
 # --- CLI --------------------------------------------------------------------
 
 
@@ -326,6 +424,27 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_download(args: argparse.Namespace) -> int:
+    try:
+        if args.doi:
+            result = download_pdf_by_doi(args.doi, args.out, allow_scihub=args.allow_scihub,
+                                         unpaywall_email=args.unpaywall_email)
+        elif args.url:
+            result = download_pdf_by_url(args.url, args.out)
+        else:
+            raise LiteratureError("需要 --doi 或 --url 参数")
+    except LiteratureError as exc:
+        print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False))
+        return 1
+    if result.get("via") == "scihub":
+        print("注意：本次下载经由 Sci-Hub，请确保你对该内容拥有合法访问权。", file=sys.stderr)
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+    else:
+        print(f"已下载 PDF：{result['path']}（{result['bytes']} 字节，来源：{result.get('source_url')}，渠道：{result.get('via', 'url')}）")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ars_codex_literature",
                                      description="ARS-Codex 文献检索 / 下载 / 全文读取")
@@ -338,6 +457,15 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument("--max-results", type=int, default=10)
     p_search.add_argument("--year-from", type=int, default=None)
     p_search.add_argument("--json", action="store_true", help="输出 JSON")
+
+    p_download = sub.add_parser("download", help="下载 PDF")
+    p_download.add_argument("--doi", default=None, help="DOI")
+    p_download.add_argument("--url", default=None, help="PDF URL")
+    p_download.add_argument("--out", default=".", help="输出目录")
+    p_download.add_argument("--allow-scihub", action="store_true",
+                            help="显式允许 Sci-Hub 回退（默认关；请确保合法访问权）")
+    p_download.add_argument("--unpaywall-email", default=None)
+    p_download.add_argument("--json", action="store_true")
     return parser
 
 
@@ -345,8 +473,13 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "search":
         return cmd_search(args)
+    if args.command == "download":
+        return cmd_download(args)
     return 2
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+

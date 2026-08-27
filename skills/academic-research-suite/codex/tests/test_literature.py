@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import pytest
 from pathlib import Path
 
 CODEX_ROOT = Path(__file__).resolve().parents[1]
@@ -174,3 +175,72 @@ def test_cli_search_prints_markdown(monkeypatch, capsys) -> None:
     assert rc == 0
     out = capsys.readouterr().out
     assert "A Test Paper On Distributed Optimization" in out
+
+def test_is_pdf_payload() -> None:
+    mod = _load()
+    assert mod.is_pdf_payload(b"%PDF-1.4\n...") is True
+    assert mod.is_pdf_payload(b"<html>") is False
+
+
+def test_download_by_url_writes_pdf(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    monkeypatch.setattr(mod, "_http_get_bytes", _fake_bytes(b"%PDF-1.4\nx"))
+    result = mod.download_pdf_by_url("https://example.com/paper.pdf", str(tmp_path))
+    assert result["ok"] is True
+    assert (tmp_path / "paper.pdf").read_bytes() == b"%PDF-1.4\nx"
+    assert result["bytes"] == 10
+
+
+def test_download_by_url_rejects_non_pdf(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    monkeypatch.setattr(mod, "_http_get_bytes", _fake_bytes(b"<html>"))
+    with pytest.raises(mod.LiteratureError):
+        mod.download_pdf_by_url("https://example.com/paper", str(tmp_path))
+
+
+def test_download_by_doi_uses_unpaywall_when_direct_not_pdf(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    calls: list[str] = []
+
+    def _get(url, **kw):
+        calls.append(url)
+        return b"<html>not a pdf</html>", {}
+
+    monkeypatch.setattr(mod, "_http_get_bytes", _get)
+    monkeypatch.setattr(mod, "lookup_unpaywall", lambda doi, email=None: "https://oa.example/paper.pdf")
+    monkeypatch.setattr(mod, "download_pdf_by_url",
+                        lambda url, out_dir, filename=None: {"ok": True, "path": str(tmp_path / "f.pdf"),
+                                                             "bytes": 3, "source_url": url})
+    result = mod.download_pdf_by_doi("10.1000/123", str(tmp_path))
+    assert result["via"] == "unpaywall"
+    assert any("doi.org" in c for c in calls)
+
+
+def test_download_by_doi_refuses_scihub_by_default(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    monkeypatch.setattr(mod, "_http_get_bytes", lambda url, **kw: (b"<html></html>", {}))
+    monkeypatch.setattr(mod, "lookup_unpaywall", lambda doi, email=None: None)
+
+    def bad(*a, **k):
+        raise AssertionError("scihub must not be called by default")
+
+    monkeypatch.setattr(mod, "_download_scihub", bad)
+    with pytest.raises(mod.LiteratureError):
+        mod.download_pdf_by_doi("10.1000/123", str(tmp_path))
+
+
+def test_download_by_doi_calls_scihub_when_opted_in(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    monkeypatch.setattr(mod, "_http_get_bytes", lambda url, **kw: (b"<html></html>", {}))
+    monkeypatch.setattr(mod, "lookup_unpaywall", lambda doi, email=None: None)
+    monkeypatch.setattr(mod, "_download_scihub",
+                        lambda doi, out_dir: {"ok": True, "path": str(tmp_path / "s.pdf"),
+                                              "bytes": 3, "source_url": "scihub://x"})
+    result = mod.download_pdf_by_doi("10.1000/123", str(tmp_path), allow_scihub=True)
+    assert result["via"] == "scihub"
+
+
+def test_cli_download_requires_doi_or_url(capsys) -> None:
+    mod = _load()
+    rc = mod.main(["download"])
+    assert rc != 0
