@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import pytest
+import zlib
 from pathlib import Path
 
 CODEX_ROOT = Path(__file__).resolve().parents[1]
@@ -78,6 +79,20 @@ RXIV_JSON = json.dumps({
         "date": "2020-01-01",
     }]
 }).encode("utf-8")
+def _minimal_pdf() -> bytes:
+    content = zlib.compress(b"BT (Hello World) Tj ET")
+    pdf = (
+        b"%PDF-1.4\n"
+        b"1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n"
+        b"2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n"
+        b"3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Contents 4 0 R>>endobj\n"
+        b"4 0 obj<</Length " + str(len(content)).encode() + b"/Filter/FlateDecode>>stream\n"
+        + content + b"\nendstream\nendobj\n"
+        b"trailer<</Root 1 0 R>>\n%%EOF\n"
+    )
+    return pdf
+
+
 def test_normalize_doi_strips_prefixes() -> None:
     mod = _load()
     assert mod.normalize_doi("https://doi.org/10.1000/XYZ") == "10.1000/xyz"
@@ -244,3 +259,40 @@ def test_cli_download_requires_doi_or_url(capsys) -> None:
     mod = _load()
     rc = mod.main(["download"])
     assert rc != 0
+
+def test_extract_pdf_text_stdlib_fallback(tmp_path) -> None:
+    mod = _load()
+    pdf = tmp_path / "sample.pdf"
+    pdf.write_bytes(_minimal_pdf())
+    result = mod.extract_pdf_text(str(pdf), force_fallback=True)
+    assert result["mode"] == "stdlib-fallback"
+    assert "Hello World" in result["text"]
+
+
+def test_extract_pdf_text_uses_pypdf_when_available(tmp_path) -> None:
+    pytest.importorskip("pypdf")
+    from pypdf import PdfWriter
+    import io as _io
+    mod = _load()
+    writer = PdfWriter()
+    writer.add_blank_page(width=612, height=792)
+    buf = _io.BytesIO()
+    writer.write(buf)
+    pdf = tmp_path / "sample_pypdf.pdf"
+    pdf.write_bytes(buf.getvalue())
+    result = mod.extract_pdf_text(str(pdf))
+    assert result["mode"] == "pypdf"
+
+
+def test_cli_read_prints_text(tmp_path, monkeypatch, capsys) -> None:
+    mod = _load()
+    pdf = tmp_path / "sample.pdf"
+    pdf.write_bytes(_minimal_pdf())
+    monkeypatch.setattr(mod, "extract_pdf_text",
+                        lambda path, max_chars=None, force_fallback=False: {
+                            "path": str(pdf), "chars": 11, "mode": "stdlib-fallback",
+                            "text": "Hello World"})
+    rc = mod.main(["read", "--file", str(pdf)])
+    assert rc == 0
+    assert "Hello World" in capsys.readouterr().out
+

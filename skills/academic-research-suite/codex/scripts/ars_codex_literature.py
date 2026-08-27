@@ -23,6 +23,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+import zlib
 from pathlib import Path
 from typing import Any, Callable
 
@@ -366,6 +367,60 @@ def download_pdf_by_doi(
     )
 
 
+# --- read -------------------------------------------------------------------
+
+
+_TEXT_OP_RE = re.compile(r"\((?:\\.|[^\\()])*\)\s*Tj|(?:\((?:\\.|[^\\()])*\)\s*)+TJ")
+_ESCAPE_MAP = {"n": "\n", "r": "\r", "t": "\t", "b": "\b", "f": "\f",
+               "(": "(", ")": ")", "\\": "\\"}
+
+
+def _extract_pdf_text_stdlib(data: bytes) -> str:
+    out: list[str] = []
+    for match in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S):
+        raw = match.group(1)
+        try:
+            content = zlib.decompress(raw)
+        except Exception:
+            content = raw
+        text = content.decode("latin-1", "replace")
+        for op in _TEXT_OP_RE.finditer(text):
+            for chunk in re.findall(r"\((?:\\.|[^\\()])*\)", op.group(0)):
+                inner = chunk[1:-1]
+                inner = re.sub(
+                    r"\\(.)",
+                    lambda m: _ESCAPE_MAP.get(m.group(1), m.group(1)),
+                    inner,
+                )
+                out.append(inner)
+    return "".join(out)
+
+
+def extract_pdf_text(
+    path: str | Path,
+    max_chars: int | None = None,
+    force_fallback: bool = False,
+) -> dict[str, Any]:
+    data = Path(path).read_bytes()
+    text = ""
+    mode = "stdlib-fallback"
+    if not force_fallback:
+        try:
+            import io
+            import pypdf
+            reader = pypdf.PdfReader(io.BytesIO(data))
+            text = "\n".join(page.extract_text() or "" for page in reader.pages)
+            mode = "pypdf"
+        except Exception:
+            text = ""
+            mode = "stdlib-fallback"
+    if mode == "stdlib-fallback":
+        text = _extract_pdf_text_stdlib(data)
+    if max_chars is not None:
+        text = text[:max_chars]
+    return {"path": str(path), "chars": len(text), "mode": mode, "text": text}
+
+
 # --- CLI --------------------------------------------------------------------
 
 
@@ -445,6 +500,21 @@ def cmd_download(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_read(args: argparse.Namespace) -> int:
+    try:
+        result = extract_pdf_text(args.file, max_chars=args.max_chars, force_fallback=args.force_fallback)
+    except Exception as exc:
+        print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False))
+        return 1
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+    else:
+        print(f"提取模式：{result['mode']}；字符数：{result['chars']}")
+        print("--- 全文 ---")
+        print(result["text"])
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="ars_codex_literature",
                                      description="ARS-Codex 文献检索 / 下载 / 全文读取")
@@ -466,6 +536,12 @@ def build_parser() -> argparse.ArgumentParser:
                             help="显式允许 Sci-Hub 回退（默认关；请确保合法访问权）")
     p_download.add_argument("--unpaywall-email", default=None)
     p_download.add_argument("--json", action="store_true")
+
+    p_read = sub.add_parser("read", help="本地 PDF 全文提取")
+    p_read.add_argument("--file", required=True, help="PDF 文件路径")
+    p_read.add_argument("--max-chars", type=int, default=None)
+    p_read.add_argument("--force-fallback", action="store_true", help="强制使用内置降级提取器")
+    p_read.add_argument("--json", action="store_true")
     return parser
 
 
@@ -475,11 +551,16 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_search(args)
     if args.command == "download":
         return cmd_download(args)
+    if args.command == "read":
+        return cmd_read(args)
     return 2
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+
 
 
 
