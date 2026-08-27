@@ -42,6 +42,7 @@
 | 退化来源 | 机器可读注册表记录 21 个优雅退化机制及其下游效果，包括新索引的上游写范围防护 launcher 状态 | 全运行时元数据将注册表检查器注册为手动验证 | near | `ars/shared/contracts/degradation_registry.json`、`ars/scripts/check_degradation_registry.py` | 上游注册表测试 | 上游 Claude-hook 行此处仅为可追溯性；Codex 运行时故障仍要求诚实报告且无有效性声明 |
 | 管线终端语义 | Stage 5 入口/完成与 Stage 6 decline/终止确认遵循钉定的上游契约 | Planner 暴露整文件边界锁 | near | `ars/academic-pipeline/WORKFLOW.md`、`ars/scripts/check_pipeline_boundary_semantics.py` | 上游边界测试 | 交互式客户端可能用不同自然语言表达确认 |
 | 上游锁定来源 | `manifest.json` 钉定上游 commits | 质量门检查包 manifest 具有完整上游 SHA 与必需 included paths | near | `manifest.json`、`codex/scripts/ars_codex_quality_gates.py` | `upstream-lock` 闸门 | 未来上游同步仍需要审慎的 manifest 更新 |
+| 文献检索 / 下载 / 读取 | 适配层新增 `ars-search` / `ars-download` / `ars-read`（上游仅做引用核验，不做全文检索与下载） | 全运行时 manifest 登记同一命令路由 | new | `codex/scripts/ars_codex_literature.py`、`codex/commands/ars-*.md`、`SKILL.md` | adapter pytest（mock 网络） | 真实网络响应与速率限制需真实环境冒烟；Sci-Hub 默认关 |
 
 ## 相对 Claude Code 的确切退化
 
@@ -60,3 +61,4 @@
 - 来源绑定证据行、作者裁定记录、评审目标绑定、人类受试者轨迹与文献/预注册载体提供确定性来源，而非作者选择、机构批准、法律建议、完整性判定或干净文档证书。
 - 引文传输不单独接受 `turn/completed`。它通过干净进程退出与两个输出 EOF 排空，因此迟到的格式错误或禁止事件仍可可见地使运行失败。
 - vendored 快照保留 promotion-bakeoff 审计产物、模式与封闭测试，但因未 vendored 规范完整历史而无法独立再证明上游 Git seal/reveal 时间线。
+
