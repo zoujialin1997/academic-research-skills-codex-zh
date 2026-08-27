@@ -545,7 +545,16 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _reconfigure_stdio() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 def main(argv: list[str] | None = None) -> int:
+    _reconfigure_stdio()
     args = build_parser().parse_args(argv)
     if args.command == "search":
         return cmd_search(args)
@@ -558,6 +567,7 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
 
 
 
