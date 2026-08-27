@@ -14,9 +14,11 @@ Sci-Hub is only attempted via the explicit --allow-scihub flag.
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -102,6 +104,13 @@ def _http_get_bytes(
                 time.sleep(2 * (attempt + 1))
                 continue
             raise LiteratureError(f"network error for {url}: {exc.reason}") from exc
+        except (http.client.IncompleteRead, ConnectionError, TimeoutError) as exc:
+            # Transient connection drops mid-read (common on arXiv) must retry,
+            # not crash the command; they are not wrapped in URLError.
+            if attempt < retries - 1:
+                time.sleep(2 * (attempt + 1))
+                continue
+            raise LiteratureError(f"connection dropped while reading {url}") from exc
     raise LiteratureError(f"request failed after {retries} attempts: {url}")
 
 
@@ -396,29 +405,75 @@ def _extract_pdf_text_stdlib(data: bytes) -> str:
     return "".join(out)
 
 
+_PYPDF_WORKER = r"""
+import io, json, sys
+from pypdf import PdfReader
+
+def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+    path = sys.argv[1]
+    max_chars = None if sys.argv[2] == "None" else int(sys.argv[2])
+    with open(path, "rb") as fh:
+        data = fh.read()
+    reader = PdfReader(io.BytesIO(data))
+    text = "\n".join((page.extract_text() or "") for page in reader.pages)
+    if max_chars is not None:
+        text = text[:max_chars]
+    json.dump({"mode": "pypdf", "text": text}, sys.stdout)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
+"""
+
+
+def _extract_pdf_text_pypdf_subprocess(
+    path: str, max_chars: int | None
+) -> dict[str, Any] | None:
+    """Extract PDF text with pypdf in a child process.
+
+    pypdf can raise uncatchable native access violations on some PDFs; running
+    it in a separate process lets us detect any failure (including a segfault
+    return code) and fall back to the stdlib extractor instead of crashing the
+    whole command.
+    """
+    try:
+        proc = subprocess.run(
+            [sys.executable, "-c", _PYPDF_WORKER, str(path),
+             "None" if max_chars is None else str(max_chars)],
+            capture_output=True,
+            timeout=120,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+    if proc.returncode != 0:
+        return None
+    try:
+        payload = json.loads(proc.stdout.decode("utf-8", "replace"))
+    except (ValueError, TypeError):
+        return None
+    text = payload.get("text") or ""
+    return {"mode": "pypdf", "chars": len(text), "text": text}
+
+
 def extract_pdf_text(
     path: str | Path,
     max_chars: int | None = None,
     force_fallback: bool = False,
 ) -> dict[str, Any]:
-    data = Path(path).read_bytes()
-    text = ""
-    mode = "stdlib-fallback"
     if not force_fallback:
-        try:
-            import io
-            import pypdf
-            reader = pypdf.PdfReader(io.BytesIO(data))
-            text = "\n".join(page.extract_text() or "" for page in reader.pages)
-            mode = "pypdf"
-        except Exception:
-            text = ""
-            mode = "stdlib-fallback"
-    if mode == "stdlib-fallback":
-        text = _extract_pdf_text_stdlib(data)
+        result = _extract_pdf_text_pypdf_subprocess(str(path), max_chars)
+        if result is not None:
+            result["path"] = str(path)
+            return result
+    data = Path(path).read_bytes()
+    text = _extract_pdf_text_stdlib(data)
     if max_chars is not None:
         text = text[:max_chars]
-    return {"path": str(path), "chars": len(text), "mode": mode, "text": text}
+    return {"path": str(path), "chars": len(text), "mode": "stdlib-fallback", "text": text}
 
 
 # --- CLI --------------------------------------------------------------------

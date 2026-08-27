@@ -296,3 +296,102 @@ def test_cli_read_prints_text(tmp_path, monkeypatch, capsys) -> None:
     assert rc == 0
     assert "Hello World" in capsys.readouterr().out
 
+
+
+# --- robustness fixes (1.1.1): retry transient reads + pypdf subprocess isolation ---
+
+class _FakeResp:
+    def __init__(self, payload: bytes):
+        self._payload = payload
+        self.headers = {}
+
+    def read(self) -> bytes:
+        return self._payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+def test_http_get_bytes_retries_incomplete_read(monkeypatch) -> None:
+    mod = _load()
+    import http.client as _hc
+    calls: list[int] = []
+
+    class _Opener:
+        def __call__(self, req, timeout=30):
+            calls.append(1)
+            if len(calls) < 3:
+                raise _hc.IncompleteRead(b"partial", 100)
+            return _FakeResp(b"full payload")
+
+    monkeypatch.setattr(mod.urllib.request, "urlopen", _Opener())
+    monkeypatch.setattr(mod.time, "sleep", lambda seconds: None)
+    data, _ = mod._http_get_bytes("https://example.com/x", retries=3)
+    assert data == b"full payload"
+    assert len(calls) == 3
+
+
+def test_http_get_bytes_incomplete_read_exhausts_retries(monkeypatch) -> None:
+    mod = _load()
+    import http.client as _hc
+
+    def _boom(req, timeout=30):
+        raise _hc.IncompleteRead(b"x", 10)
+
+    monkeypatch.setattr(mod.urllib.request, "urlopen", _boom)
+    monkeypatch.setattr(mod.time, "sleep", lambda seconds: None)
+    with pytest.raises(mod.LiteratureError):
+        mod._http_get_bytes("https://example.com/x", retries=2)
+
+
+def test_extract_pdf_text_uses_pypdf_subprocess(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    pdf = tmp_path / "p.pdf"
+    pdf.write_bytes(_minimal_pdf())
+    import subprocess as _sp
+    captured: dict = {}
+
+    def _fake_run(cmd, capture_output=False, timeout=0):
+        captured["cmd"] = cmd
+        return _sp.CompletedProcess(cmd, 0,
+                                    stdout=b'{"mode": "pypdf", "text": "hello world"}', stderr=b"")
+
+    monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+    result = mod.extract_pdf_text(str(pdf), max_chars=5)
+    assert result["mode"] == "pypdf"
+    assert result["text"] == "hello world"
+    assert result["chars"] == 11
+    assert captured["cmd"][1] == "-c"
+    assert captured["cmd"][-1] == "5"
+
+
+def test_extract_pdf_text_falls_back_on_pypdf_crash(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    pdf = tmp_path / "p.pdf"
+    pdf.write_bytes(_minimal_pdf())
+    import subprocess as _sp
+
+    def _fake_run(cmd, capture_output=False, timeout=0):
+        return _sp.CompletedProcess(cmd, 3221225477, stdout=b"", stderr=b"")
+
+    monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+    result = mod.extract_pdf_text(str(pdf))
+    assert result["mode"] == "stdlib-fallback"
+    assert "Hello World" in result["text"]
+
+
+def test_extract_pdf_text_falls_back_on_timeout(tmp_path, monkeypatch) -> None:
+    mod = _load()
+    pdf = tmp_path / "p.pdf"
+    pdf.write_bytes(_minimal_pdf())
+    import subprocess as _sp
+
+    def _fake_run(cmd, capture_output=False, timeout=0):
+        raise _sp.TimeoutExpired(cmd, timeout)
+
+    monkeypatch.setattr(mod.subprocess, "run", _fake_run)
+    result = mod.extract_pdf_text(str(pdf))
+    assert result["mode"] == "stdlib-fallback"
