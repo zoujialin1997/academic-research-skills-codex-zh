@@ -2,7 +2,6 @@
 
 [![Version](https://img.shields.io/badge/version-v1.1.1-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 🚀 中国語（簡体）初心者チュートリアル → [《新手快速上手》](GETTING_STARTED_ZH-CN.md)（中国語のみ）；チャットで `/ars-guide` と入力すると対話形式のガイドが利用できます。
 
 ARS-Codex は、[Academic Research Skills（ARS）Claude Code 版](https://github.com/Imbad0202/academic-research-skills) の Codex ネイティブな sibling ディストリビューションです。独自の plugin ID、パッケージング、バージョン、および runtime adapter を持ちます。
@@ -295,10 +294,6 @@ export ARS_CROSS_MODEL="gpt-5.5"
 ```
 
 その後、プロンプトでクロスモデル検証を明示的に要求してください。provider が設定されていない場合、または送信内容の種類に対する明示的な同意がない場合、ARS-Codex はシングルランタイムレビューにフォールバックし、クロスモデル検証が利用不可であったことを報告します。
-
-## サポートとスポンサーシップ
-
-ARS-Codex があなたの研究ワークフローに役立った場合、[Buy Me a Coffee](https://buymeacoffee.com/crucify020v) からメンテナンスをサポートいただけます。
 
 ## セキュリティ
 

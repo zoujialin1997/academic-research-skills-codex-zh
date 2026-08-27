@@ -2,7 +2,6 @@
 
 [![Version](https://img.shields.io/badge/version-v1.1.1-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
 **语言：** [English](README.md) · [简体中文](README_ZH-CN.md) · [繁體中文](README_ZH-TW.md) · [日本語](README_JA.md)
 🚀 新手从这里开始 → [《新手快速上手》](GETTING_STARTED_ZH-CN.md)
@@ -357,10 +356,6 @@ export ARS_CROSS_MODEL="gpt-5.5"
 ```
 
 然后在提示词中明确请求跨模型验证。如果未配置 provider 或未取得要发送内容类别的明确同意，ARS-Codex 将回退到单运行时审阅，并报告跨模型验证不可用。
-
-## 支持与赞助
-
-如果 ARS-Codex 对你的研究 workflow 有所帮助，欢迎通过 [Buy Me a Coffee](https://buymeacoffee.com/crucify020v) 支持维护工作。
 
 ## 安全
 

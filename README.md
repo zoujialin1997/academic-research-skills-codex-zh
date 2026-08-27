@@ -2,7 +2,6 @@
 
 [![Version](https://img.shields.io/badge/version-v1.1.1-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 
 **Languages:** [English](README.md) · [简体中文](README_ZH-CN.md) · [繁體中文](README_ZH-TW.md) · [日本語](README_JA.md)
 🚀 Chinese beginner tutorial → [《新手快速上手》](GETTING_STARTED_ZH-CN.md) (Chinese-only); type `/ars-guide` in chat for interactive onboarding.
@@ -446,11 +445,6 @@ export ARS_CROSS_MODEL="gpt-5.5"
 Without both a configured provider and explicit user consent for the content
 class being sent, ARS-Codex falls back to single-runtime review and reports that
 cross-model verification was unavailable.
-
-## Support And Sponsorship
-
-If ARS-Codex helps your research workflow, you can support maintenance through
-[Buy Me a Coffee](https://buymeacoffee.com/crucify020v).
 
 ## Security
 

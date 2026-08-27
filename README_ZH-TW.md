@@ -2,7 +2,6 @@
 
 [![Version](https://img.shields.io/badge/version-v1.1.1-blue)](VERSION)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
 🚀 簡體中文新手教學 → [《新手快速上手》](GETTING_STARTED_ZH-CN.md)（僅簡體中文）；對話中輸入 `/ars-guide` 可取得互動式引導。
 
 ARS-Codex 是
@@ -348,11 +347,6 @@ export ARS_CROSS_MODEL="gpt-5.5"
 
 然後在提示中明確要求跨模型驗證。若未設定 provider 或未取得要送出內容類別的
 明確同意，ARS-Codex 將回退至單一執行時期審查，並應報告跨模型驗證不可用。
-
-## 支持與贊助
-
-如果 ARS-Codex 對您的研究 workflow 有所幫助，您可以透過
-[Buy Me a Coffee](https://buymeacoffee.com/crucify020v) 支持後續維護。
 
 ## 安全性
 
