@@ -20,7 +20,7 @@ description: >
   /ars-cache-invalidate, /ars-rebuttal-audit, ars-search, ars-download, ars-read, /ars-full。
   本技能在 ars/ 下内嵌了 ARS 角色提示词、参考资料、模板与共享交接模式。
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
   upstream_suite: "academic-research-skills"
   codex_adapter: true
 allowed-tools: Read, Glob, Grep, WebSearch, Bash(uv *), Bash(python *), Bash(python3 *)
@@ -411,3 +411,4 @@ Scholar、OpenAlex 与 Crossref API 说明在 `ars/deep-research/references/` �
 - 对中文，除非用户另有要求，否则使用繁体中文。
 - 对分阶段工作流，显示当前阶段、必需输入、输出产物，以及下一闸门是可选还是强制。
 - 对论文/研究输出，保持不确定性显式，并将证据、推断与建议分离。
+
